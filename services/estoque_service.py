@@ -4,6 +4,7 @@ from estruturas.fila import Fila
 from estruturas.lde import LDE
 from estruturas.lse import LSE
 from services.persistencia_service import PersistenciaService
+from models.cliente import Cliente
 
 class EstoqueService:
     def __init__(self):
@@ -48,7 +49,12 @@ class EstoqueService:
         return maior_codigo + 1
 
     def cadastrar_cliente(self, nome):
-        pass
+        codigo=self.gerar_proximo_codigo_cliente()
+        cliente=Cliente(codigo, nome)
+        self.clientes.inserir_fim(cliente)
+        self.salvar_clientes()
+        return cliente
+
 
     def listar_clientes(self):
         pass
