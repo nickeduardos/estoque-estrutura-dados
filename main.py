@@ -56,7 +56,7 @@ def executar_opcao(opcao, service):
         service.listar_clientes()
 
     elif opcao == 3:
-        pass
+        service.buscar_cliente(ler_inteiro("Informe o código do cliente: "))
 
     elif opcao == 4:
         pass
