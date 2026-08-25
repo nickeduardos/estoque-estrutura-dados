@@ -69,7 +69,12 @@ class EstoqueService:
             print("Cliente não encontrado.")
 
     def remover_cliente(self, codigo):
-        pass
+        removerCliente = self.clientes.remover(codigo)
+        if removerCliente is not None:
+            print(f"Cliente removido: Codigo {removerCliente.codigo}, nome {removerCliente.nome}")
+            self.salvar_clientes()
+        else:
+            print("Cliente não encontrado.")
 
     def cadastrar_produto(self, nome, preco, quantidade):
         pass
