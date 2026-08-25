@@ -53,9 +53,13 @@ def executar_opcao(opcao, service):
         service.cadastrar_cliente(nome)
 
     elif opcao == 2:
+        print()
+        print("=======LISTA DE CLIENTES=======")
         service.listar_clientes()
 
     elif opcao == 3:
+        print()
+        print("=======BUSCAR CLIENTE=======")
         service.buscar_cliente(ler_inteiro("Informe o código do cliente: "))
 
     elif opcao == 4:
@@ -120,6 +124,8 @@ def main():
 
     while True:
         mostrar_menu()
+
+        print()
 
         try:
             opcao = ler_inteiro("Escolha uma opcao: ")
