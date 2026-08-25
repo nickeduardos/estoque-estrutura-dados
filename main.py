@@ -63,7 +63,8 @@ def executar_opcao(opcao, service):
         service.buscar_cliente(ler_inteiro("Informe o código do cliente: "))
 
     elif opcao == 4:
-        pass
+        service.remover_cliente(ler_inteiro("Informe o código do cliente a ser removido: "))
+        
 
     elif opcao == 5:
         pass
