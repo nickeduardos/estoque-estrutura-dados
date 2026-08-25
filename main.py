@@ -49,10 +49,11 @@ def mostrar_menu():
 
 def executar_opcao(opcao, service):
     if opcao == 1:
-        pass
+        nome = input("Informe o nome do cliente: ")
+        service.cadastrar_cliente(nome)
 
     elif opcao == 2:
-        pass
+        service.listar_clientes()
 
     elif opcao == 3:
         pass
@@ -126,6 +127,7 @@ def main():
             if opcao == 0:
                 print("Sistema encerrado.")
                 break
+
 
             executar_opcao(opcao, service)
 
