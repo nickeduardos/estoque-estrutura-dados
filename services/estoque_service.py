@@ -57,7 +57,8 @@ class EstoqueService:
 
 
     def listar_clientes(self):
-        pass
+        for cliente in self.clientes.listar():
+            print (f"Codigo {cliente.codigo}, nome {cliente.nome}")
 
     def buscar_cliente(self, codigo):
         pass
