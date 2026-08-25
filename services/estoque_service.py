@@ -61,7 +61,11 @@ class EstoqueService:
             print (f"Codigo {cliente.codigo}, nome {cliente.nome}")
 
     def buscar_cliente(self, codigo):
-        pass
+        buscarCliente = self.clientes.buscar(codigo)
+        if buscarCliente is not None:
+            print(f"Cliente encontrado: Codigo {buscarCliente.codigo}, nome {buscarCliente.nome}")
+        else:
+            print("Cliente não encontrado.")
 
     def remover_cliente(self, codigo):
         pass
