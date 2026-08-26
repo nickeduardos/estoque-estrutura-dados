@@ -1,4 +1,5 @@
 from services.estoque_service import EstoqueService
+import os
 
 def ler_inteiro(mensagem):
     valor = input(mensagem)
@@ -53,8 +54,6 @@ def executar_opcao(opcao, service):
         service.cadastrar_cliente(nome)
 
     elif opcao == 2:
-        print()
-        print("=======LISTA DE CLIENTES=======")
         service.listar_clientes()
 
     elif opcao == 3:
@@ -67,13 +66,15 @@ def executar_opcao(opcao, service):
         
     elif opcao == 5:
         NomeProduto = input ("Informe o nome do produto que deseja cadastrar: ")
+        print()
         Preco = float (input ("Digite o valor do produto: "))
+        print()
         Quantidade = int (input ("Digite a quantidade do produto em estoque: "))
 
         service.cadastrar_produto(NomeProduto, Preco, Quantidade)
 
     elif opcao == 6:
-        pass
+        service.listar_produtos()
 
     elif opcao == 7:
         pass
@@ -125,6 +126,8 @@ def executar_opcao(opcao, service):
 
 def main():
     service = EstoqueService()
+
+    os.system("cls")
 
     while True:
         mostrar_menu()
