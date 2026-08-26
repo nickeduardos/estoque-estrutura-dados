@@ -58,6 +58,8 @@ class EstoqueService:
 
 
     def listar_clientes(self):
+        print()
+        print("=======LISTA DE CLIENTES=======")
         for cliente in self.clientes.listar():
             print (f"[{cliente.codigo}] - {cliente.nome}")
 
@@ -80,13 +82,17 @@ class EstoqueService:
     def cadastrar_produto(self, nome, preco, quantidade):
         Codigo = self.gerar_proximo_codigo_produto()
         NovoProduto = Produto(Codigo, nome, preco, quantidade)
+        print ()
         print (f"Produto cadastrado! {NovoProduto}")
         self.produtos.inserir_fim(NovoProduto)
         self.salvar_produtos()
         return NovoProduto
 
     def listar_produtos(self):
-        pass
+        print()
+        print("=======LISTA DE PRODUTOS=======")
+        for produto in self.produtos.listar():
+            print (f"Id [{produto.codigo}] - {produto.nome} | {produto.quantidade} unidades em estoque.")
 
     def listar_produtos_inverso(self):
         pass
