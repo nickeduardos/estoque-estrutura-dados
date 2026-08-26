@@ -58,20 +58,20 @@ class EstoqueService:
 
     def listar_clientes(self):
         for cliente in self.clientes.listar():
-            print (f"Cliente [{cliente.codigo}] {cliente.nome}")
+            print (f"[{cliente.codigo}] - {cliente.nome}")
 
     def buscar_cliente(self, codigo):
         buscarCliente = self.clientes.buscar(codigo)
         if buscarCliente is not None:
             print()
-            print(f"Cliente encontrado -> [{buscarCliente.codigo}] {buscarCliente.nome}")
+            print(f"[{buscarCliente.codigo}] - {buscarCliente.nome}")
         else:
             print("Cliente não encontrado.")
 
     def remover_cliente(self, codigo):
         removerCliente = self.clientes.remover(codigo)
         if removerCliente is not None:
-            print(f"Cliente removido: Codigo {removerCliente.codigo}, nome {removerCliente.nome}")
+            print(f"Cliente removido -> [{removerCliente.codigo}] - {removerCliente.nome}")
             self.salvar_clientes()
         else:
             print("Cliente não encontrado.")
