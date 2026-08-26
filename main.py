@@ -66,7 +66,11 @@ def executar_opcao(opcao, service):
         service.remover_cliente(ler_inteiro("Informe o código do cliente a ser removido: "))
         
     elif opcao == 5:
-        pass
+        NomeProduto = input ("Informe o nome do produto que deseja cadastrar: ")
+        Preco = float (input ("Digite o valor do produto: "))
+        Quantidade = int (input ("Digite a quantidade do produto em estoque: "))
+
+        service.cadastrar_produto(NomeProduto, Preco, Quantidade)
 
     elif opcao == 6:
         pass
