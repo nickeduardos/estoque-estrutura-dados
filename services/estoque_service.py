@@ -5,6 +5,7 @@ from estruturas.lde import LDE
 from estruturas.lse import LSE
 from services.persistencia_service import PersistenciaService
 from models.cliente import Cliente
+from models.produto import Produto
 
 class EstoqueService:
     def __init__(self):
@@ -77,7 +78,12 @@ class EstoqueService:
             print("Cliente não encontrado.")
 
     def cadastrar_produto(self, nome, preco, quantidade):
-        pass
+        Codigo = self.gerar_proximo_codigo_produto()
+        NovoProduto = Produto(Codigo, nome, preco, quantidade)
+        print (f"Produto cadastrado! {NovoProduto}")
+        self.produtos.inserir_fim(NovoProduto)
+        self.salvar_produtos()
+        return NovoProduto
 
     def listar_produtos(self):
         pass
