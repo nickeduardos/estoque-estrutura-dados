@@ -101,7 +101,13 @@ class EstoqueService:
         pass
 
     def buscar_produto(self, codigo):
-        pass
+        BuscarProduto = self.produtos.buscar(codigo)
+        if BuscarProduto is not None:
+            print ()
+            print (f"[{BuscarProduto.codigo}] - {BuscarProduto.nome}")
+        else:
+            print ()
+            print ("Erro! Produto inexistente")
 
     def buscar_produto_binario(self, codigo):
         pass

@@ -77,7 +77,9 @@ def executar_opcao(opcao, service):
         service.listar_produtos()
 
     elif opcao == 7:
-        pass
+        print()
+        print("=======BUSCAR PRODUTO=======")
+        service.buscar_produto(ler_inteiro("Digite o Id do produto que deseja buscar: "))
 
     elif opcao == 8:
         pass
