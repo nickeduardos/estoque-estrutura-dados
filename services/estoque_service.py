@@ -3,9 +3,12 @@ import os
 from estruturas.fila import Fila
 from estruturas.lde import LDE
 from estruturas.lse import LSE
+from estruturas.pilha import Pilha
 from services.persistencia_service import PersistenciaService
 from models.cliente import Cliente
 from models.produto import Produto
+from algoritmos.ordenacao import ordenar_produtos_por_id
+from algoritmos.busca_binaria import buscar_produto_por_id
 
 class EstoqueService:
     def __init__(self):
@@ -111,10 +114,21 @@ class EstoqueService:
             print (f"[{BuscarProduto.codigo}] - {BuscarProduto.nome}")
         else:
             print ()
-            print ("Erro! Produto inexistente")
+            print ("Erro! Você precisa digitar o Id do produto.")
 
     def buscar_produto_binario(self, codigo):
-        pass
+
+        BuscarProduto = buscar_produto_por_id(self.produtos.listar(), codigo)
+
+        if BuscarProduto not in self.produtos.listar():
+            print ("Erro! Esse Id não possui produtos cadastrados.")
+
+            if BuscarProduto is not None:
+                print()
+                print (f"[{BuscarProduto.codigo}] - {BuscarProduto.nome}")
+            else:
+                print ()
+                print ("Erro! Você precisa digitar o Id do produto.")
 
     def atualizar_estoque(self, codigo, nova_quantidade):
         pass
