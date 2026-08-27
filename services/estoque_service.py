@@ -95,7 +95,11 @@ class EstoqueService:
             print (f"Id [{produto.codigo}] - {produto.nome} | {produto.quantidade} unidades em estoque.")
 
     def listar_produtos_inverso(self):
-        pass
+        print()
+        print("=======LISTA DE PRODUTOS INVERSA=======")
+        for produto in self.produtos.listar_inverso():
+            print (f"Id [{produto.codigo}] - {produto.nome} | {produto.quantidade} unidades em estoque.")
+        
 
     def listar_produtos_ordenados_por_id(self):
         pass

@@ -88,7 +88,8 @@ def executar_opcao(opcao, service):
         pass
 
     elif opcao == 10:
-        pass
+        service.listar_produtos_inverso()
+        
 
     elif opcao == 11:
         pass
