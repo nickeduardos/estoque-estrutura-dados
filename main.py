@@ -95,8 +95,10 @@ def executar_opcao(opcao, service):
         pass
 
     elif opcao == 12:
-        pass
-
+        print()
+        print("=======BUSCAR PRODUTO COM BUSCA BINARIA=======")
+        service.buscar_produto_binario(ler_inteiro("Digite o Id do produto que deseja buscar: "))
+        
     elif opcao == 13:
         pass
 
