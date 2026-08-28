@@ -1,6 +1,9 @@
 from services.estoque_service import EstoqueService
 import os
 
+def limpar_tela():
+    os.system("cls")
+
 def ler_inteiro(mensagem):
     valor = input(mensagem)
     return int(valor)
@@ -82,22 +85,7 @@ def executar_opcao(opcao, service):
         service.buscar_produto(ler_inteiro("Digite o Id do produto que deseja buscar: "))
 
     elif opcao == 8:
-        print()
-        print("=======ATUALIZAR QUANTIDADE EM ESTOQUE=======")
-
-        service.listar_produtos()
-
-        print()
-
-        codigo = ler_inteiro("Digite o código do produto que deseja atualizar: ")
-        print()
-        NovaQuantidade = ler_inteiro("Digite a nova quantidade do produto: ")
-
-        service.atualizar_estoque(codigo, NovaQuantidade)
-
-        print()
-
-        print(f"Produto [{codigo}] Atualizado para {NovaQuantidade} Unidades em estoque")
+        pass
 
     elif opcao == 9:
         pass
@@ -147,7 +135,7 @@ def executar_opcao(opcao, service):
 def main():
     service = EstoqueService()
 
-    os.system("cls")
+    limpar_tela()
 
     while True:
         mostrar_menu()
