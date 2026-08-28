@@ -131,8 +131,11 @@ class EstoqueService:
                 print ("Erro! Você precisa digitar o Id do produto.")
 
     def atualizar_estoque(self, codigo, nova_quantidade):
-        pass
-
+        ProdutoBuscado = self.produtos.buscar(codigo)
+        ProdutoBuscado.quantidade = nova_quantidade
+        self.salvar_produtos()
+        
+    
     def remover_produto(self, codigo):
         pass
 

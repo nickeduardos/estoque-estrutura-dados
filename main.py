@@ -82,7 +82,22 @@ def executar_opcao(opcao, service):
         service.buscar_produto(ler_inteiro("Digite o Id do produto que deseja buscar: "))
 
     elif opcao == 8:
-        pass
+        print()
+        print("=======ATUALIZAR QUANTIDADE EM ESTOQUE=======")
+
+        service.listar_produtos()
+
+        print()
+
+        codigo = ler_inteiro("Digite o código do produto que deseja atualizar: ")
+        print()
+        NovaQuantidade = ler_inteiro("Digite a nova quantidade do produto: ")
+
+        service.atualizar_estoque(codigo, NovaQuantidade)
+
+        print()
+
+        print(f"Produto [{codigo}] Atualizado para {NovaQuantidade} Unidades em estoque")
 
     elif opcao == 9:
         pass
