@@ -87,7 +87,7 @@ def executar_opcao(opcao, service):
     elif opcao == 8:
         print()
         print("=======ATUALIZAR QUANTIDADE EM ESTOQUE=======")
-        
+
         service.listar_produtos()
         
         print()
@@ -103,7 +103,7 @@ def executar_opcao(opcao, service):
         print(f"Produto [{codigo}] Atualizado para {NovaQuantidade} Unidades em estoque")
 
     elif opcao == 9:
-        pass
+        service.remover_produto(ler_inteiro("Informe o código do produto a ser removido: "))
 
     elif opcao == 10:
         service.listar_produtos_inverso()
