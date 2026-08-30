@@ -137,7 +137,13 @@ class EstoqueService:
         
     
     def remover_produto(self, codigo):
-        pass
+        produto_removido = self.produtos.remover(codigo)
+        if produto_removido is not None:
+            print(f"Produto removido -> [{produto_removido.codigo}] - {produto_removido.nome}")
+            self.salvar_produtos()
+            return produto_removido
+        else:
+            print("Produto não encontrado.")
 
     def realizar_venda_exemplo(self, codigo_cliente, codigo_produto, quantidade):
         pass
