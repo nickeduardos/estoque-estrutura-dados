@@ -58,8 +58,7 @@ class EstoqueService:
         self.clientes.inserir_fim(cliente)
         self.salvar_clientes()
         return cliente
-
-
+    
     def listar_clientes(self):
         print()
         print("=======LISTA DE CLIENTES=======")
@@ -149,7 +148,10 @@ class EstoqueService:
         pass
 
     def listar_vendas(self):
-        pass
+        print()
+        print("=======LISTA DE VENDAS=======")
+        for vendas in self.vendas.listar():    
+            print(f"Venda [{vendas.codigo}] - Cliente ID: {vendas.codigo_cliente} | Total: R$ {vendas.valor_total:.2f}")   
 
     def primeira_venda(self):
         pass
