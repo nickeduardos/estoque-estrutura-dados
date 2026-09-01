@@ -92,7 +92,7 @@ def executar_opcao(opcao, service):
         
         print()
         
-        codigo = ler_inteiro("Digite o código doEn produto que deseja atualizar: ")
+        codigo = ler_inteiro("Digite o código do produto que deseja atualizar: ")
         print()
         NovaQuantidade = ler_inteiro("Digite a nova quantidade do produto: ")
         
@@ -121,7 +121,7 @@ def executar_opcao(opcao, service):
         pass
 
     elif opcao == 14:
-        service.listar_vendas()
+        pass
 
     elif opcao == 15:
         pass
