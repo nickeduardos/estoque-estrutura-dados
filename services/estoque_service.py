@@ -9,6 +9,7 @@ from models.cliente import Cliente
 from models.produto import Produto
 from algoritmos.ordenacao import ordenar_produtos_por_id
 from algoritmos.busca_binaria import buscar_produto_por_id
+from models.venda import Venda
 
 class EstoqueService:
     def __init__(self):
@@ -148,7 +149,36 @@ class EstoqueService:
             print("Produto não encontrado.")
 
     def realizar_venda_exemplo(self, codigo_cliente, codigo_produto, quantidade):
-        pass
+        cliente = self.clientes.buscar(codigo_cliente)
+        produto = self.produtos.buscar(codigo_produto)
+        
+
+        if cliente is None:
+            print("Cliente não encontrado.")
+            return
+        
+        if produto is None:
+            print("Produto não encontrado.")
+            return
+
+        if quantidade <= 0:
+            print("Quantidade inválida.")
+            return
+
+        if quantidade > produto.quantidade:
+            print("Quantidade em estoque insuficiente.")
+            return
+
+        codigo_venda = self.gerar_proximo_codigo_venda()
+        itens=[{"codigo_produto": produto.codigo, "quantidade": quantidade, "preco_unitario": produto.preco}]
+        venda = Venda(codigo_venda, cliente.codigo, itens)  
+        produto.quantidade -= quantidade
+        self.vendas.enqueue(venda)
+        self.salvar_produtos()
+        self.salvar_vendas()
+        print(f"Venda realizada com sucesso! {venda}")
+        
+        return venda
 
     def listar_vendas(self):
         pass
