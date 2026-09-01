@@ -188,7 +188,14 @@ class EstoqueService:
         
 
     def primeira_venda(self):
-        pass
+        if self.vendas.is_empty():
+            print("Não há vendas registradas.")
+            return None
+        primeira_venda = self.vendas.front()
+        print()
+        print("=======PRIMEIRA VENDA=======")
+        print(f"[{primeira_venda.codigo}] - Cliente {primeira_venda.codigo_cliente} | Total R$ {primeira_venda.valor_total:.2f}")
+        
 
     def valor_total_estoque(self):
         pass

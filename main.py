@@ -125,7 +125,8 @@ def executar_opcao(opcao, service):
         
 
     elif opcao == 15:
-        pass
+        service.primeira_venda()
+        
 
     elif opcao == 16:
         pass
