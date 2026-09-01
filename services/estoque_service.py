@@ -105,7 +105,11 @@ class EstoqueService:
         
 
     def listar_produtos_ordenados_por_id(self):
-        pass
+        print ()
+        print ("=======LISTA DE PRODUTOS ORDENADOS POR ID=======")
+        ProdutosOrdenados = ordenar_produtos_por_id(self.produtos.listar())
+        for produto in ProdutosOrdenados:
+            print (f"[{produto.codigo}] -> {produto.nome} | R$ {produto.preco} | {produto.quantidade} unidades em estoque")
 
     def buscar_produto(self, codigo):
         BuscarProduto = self.produtos.buscar(codigo)
@@ -117,18 +121,16 @@ class EstoqueService:
             print ("Erro! Você precisa digitar o Id do produto.")
 
     def buscar_produto_binario(self, codigo):
-
         BuscarProduto = buscar_produto_por_id(self.produtos.listar(), codigo)
 
         if BuscarProduto not in self.produtos.listar():
-            print ("Erro! Esse Id não possui produtos cadastrados.")
+            print ()
+            print ("Erro! Id não cadastrado em nenhum produto.")
 
-            if BuscarProduto is not None:
-                print()
-                print (f"[{BuscarProduto.codigo}] - {BuscarProduto.nome}")
-            else:
-                print ()
-                print ("Erro! Você precisa digitar o Id do produto.")
+        else:
+            print()
+            print("Produto Encontrado!")
+            print (f"[{BuscarProduto.codigo}] - {BuscarProduto.nome}")
 
     def atualizar_estoque(self, codigo, nova_quantidade):
         ProdutoBuscado = self.produtos.buscar(codigo)

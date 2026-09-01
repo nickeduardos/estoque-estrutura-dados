@@ -108,9 +108,8 @@ def executar_opcao(opcao, service):
     elif opcao == 10:
         service.listar_produtos_inverso()
         
-
     elif opcao == 11:
-        pass
+        service.listar_produtos_ordenados_por_id()
 
     elif opcao == 12:
         print()
