@@ -117,7 +117,8 @@ def executar_opcao(opcao, service):
         service.buscar_produto_binario(ler_inteiro("Digite o Id do produto que deseja buscar: "))
         
     elif opcao == 13:
-        pass
+        service.realizar_venda_exemplo(ler_inteiro("Informe o código do cliente: "), ler_inteiro("Informe o código do produto: "), ler_inteiro("Informe a quantidade: "))
+        
 
     elif opcao == 14:
         pass
