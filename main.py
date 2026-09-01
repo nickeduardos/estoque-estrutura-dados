@@ -121,7 +121,8 @@ def executar_opcao(opcao, service):
         
 
     elif opcao == 14:
-        pass
+        service.listar_vendas()
+        
 
     elif opcao == 15:
         pass

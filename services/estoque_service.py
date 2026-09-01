@@ -181,7 +181,11 @@ class EstoqueService:
         return venda
 
     def listar_vendas(self):
-        pass
+        print()
+        print("=======LISTA DE VENDAS=======")
+        for venda in self.vendas.listar():
+            print(f"[{venda.codigo}] - Cliente {venda.codigo_cliente} | Total R$ {venda.valor_total:.2f}")
+        
 
     def primeira_venda(self):
         pass
