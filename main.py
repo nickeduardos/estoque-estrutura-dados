@@ -129,6 +129,7 @@ def executar_opcao(opcao, service):
         
 
     elif opcao == 16:
+        service.valor_total_estoque()
         pass
 
     elif opcao == 17:

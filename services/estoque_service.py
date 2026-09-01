@@ -195,10 +195,21 @@ class EstoqueService:
         print()
         print("=======PRIMEIRA VENDA=======")
         print(f"[{primeira_venda.codigo}] - Cliente {primeira_venda.codigo_cliente} | Total R$ {primeira_venda.valor_total:.2f}")
+
+        return primeira_venda
         
 
     def valor_total_estoque(self):
-        pass
+        total=0
+
+        for produto in self.produtos.listar():
+            total += produto.preco * produto.quantidade
+
+        print()
+        print("=======VALOR TOTAL EM ESTOQUE=======")
+        print(f"Valor total em estoque: R$ {total:.2f}")
+
+        return total
 
     def valor_total_vendas(self):
         pass
