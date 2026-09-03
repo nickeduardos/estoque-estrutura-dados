@@ -237,7 +237,29 @@ class EstoqueService:
                     print(f"[{cliente.codigo}] - {cliente.nome} | Total gasto: R$ {total:.2f}")
 
     def cliente_que_mais_gastou(self):
-        pass
+        maiorGasto = 0
+        clienteMaisGastou = None
+
+        for cliente in self.clientes.listar():
+            total=0
+
+            for venda in self.vendas.listar():
+                if venda.codigo_cliente == cliente.codigo:
+                    total += venda.valor_total
+            if total > maiorGasto:
+                maiorGasto = total
+                clienteMaisGastou = cliente
+
+        if clienteMaisGastou is None:
+            print("Nenhum registro de compra encontrado.")
+            return None
+
+        print()
+        print("=======CLIENTE QUE MAIS GASTOU=======")  
+        print(f"[{clienteMaisGastou.codigo}] - {clienteMaisGastou.nome} | Total gasto: R$ {maiorGasto:.2f}")
+
+        return clienteMaisGastou
+        
 
     def produto_mais_vendido(self):
         pass
