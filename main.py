@@ -140,7 +140,8 @@ def executar_opcao(opcao, service):
         service.clientes_e_valores_totais_gastos()
 
     elif opcao == 19:
-        pass
+        service.cliente_que_mais_gastou()
+        
 
     elif opcao == 20:
         pass
