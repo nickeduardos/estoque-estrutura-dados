@@ -224,7 +224,17 @@ class EstoqueService:
         return total
 
     def clientes_e_valores_totais_gastos(self):
-        pass
+        print()
+        print("=======CLIENTES E VALORES TOTAIS GASTOS=======")
+
+        for cliente in self.clientes.listar():
+            total=0
+
+            for venda in self.vendas.listar():
+                if venda.codigo_cliente == cliente.codigo:
+                    total += venda.valor_total
+
+                    print(f"[{cliente.codigo}] - {cliente.nome} | Total gasto: R$ {total:.2f}")
 
     def cliente_que_mais_gastou(self):
         pass
