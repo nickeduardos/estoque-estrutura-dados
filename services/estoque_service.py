@@ -212,7 +212,16 @@ class EstoqueService:
         return total
 
     def valor_total_vendas(self):
-        pass
+        total=0
+
+        for venda in self.vendas.listar():
+            total += venda.valor_total
+
+        print()
+        print("=======VALOR TOTAL DAS VENDAS=======")
+        print(f"Valor total das vendas: R$ {total:.2f}")
+
+        return total
 
     def clientes_e_valores_totais_gastos(self):
         pass
