@@ -183,8 +183,14 @@ class EstoqueService:
     def listar_vendas(self):
         print()
         print("=======LISTA DE VENDAS=======")
+
+
         for venda in self.vendas.listar():
-            print(f"[{venda.codigo}] - Cliente {venda.codigo_cliente} | Total R$ {venda.valor_total:.2f}")
+            if venda is not None:
+                cliente = self.clientes.buscar(venda.codigo_cliente)
+
+                if cliente is not None:
+                    print(f"[{cliente.codigo}] - {cliente.nome} | Total R$ {venda.valor_total:.2f}")
         
 
     def primeira_venda(self):
