@@ -268,7 +268,45 @@ class EstoqueService:
         
 
     def produto_mais_vendido(self):
-        pass
+        TotaisVendidos = {}
+
+
+        for venda in self.vendas.listar():
+            for item in venda.itens:
+                codigo = item ["codigo_produto"]
+                quantidade = item ["quantidade"]
+
+                if codigo in TotaisVendidos:
+                    TotaisVendidos[codigo] += quantidade
+
+                else:
+                    TotaisVendidos[codigo] = quantidade
+
+        if not TotaisVendidos:
+            print ("Nenhuma venda registrada.")
+            return None
+
+        CodigoMaisVendido = None
+        MaiorQuantidade = 0
+
+        for codigo, quantidade in TotaisVendidos.items():
+            if quantidade > MaiorQuantidade:
+                MaiorQuantidade = quantidade
+                CodigoMaisVendido = codigo
+
+        ProdutoBuscar = self.produtos.buscar(CodigoMaisVendido)
+
+        print ()
+        print ("=======PRODUTO MAIS VENDIDO=======")
+        print()
+
+        if ProdutoBuscar is not None:
+            print (f"[{ProdutoBuscar.codigo}] - {ProdutoBuscar.nome} | Total Vendido: {MaiorQuantidade} Unidades")
+
+        else:
+            print (f"Codigo do produto: {CodigoMaisVendido} | Total Vendido: {MaiorQuantidade} unidades (Produto não encontrado no estoque)")
+            
+        return ProdutoBuscar
 
     def desfazer_ultima_operacao(self):
         pass

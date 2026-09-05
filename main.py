@@ -144,7 +144,7 @@ def executar_opcao(opcao, service):
         
 
     elif opcao == 20:
-        pass
+        service.produto_mais_vendido()
 
     elif opcao == 21:
         pass
