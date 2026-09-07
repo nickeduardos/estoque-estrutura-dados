@@ -19,6 +19,7 @@ class EstoqueService:
         self.clientes = LSE()
         self.produtos = LDE()
         self.vendas = Fila()
+        self.operacoes = Pilha()
         self.persistencia = PersistenciaService(pasta_data)
 
         self.carregar_dados()
@@ -58,6 +59,12 @@ class EstoqueService:
         cliente=Cliente(codigo, nome)
         self.clientes.inserir_fim(cliente)
         self.salvar_clientes()
+        print("Cliente Cadastrado!")
+        self.operacoes.push({
+                    "acao" : "cadastrar_cliente",
+                    "codigo" : codigo,
+                    "nome" : nome
+                })
         return cliente
 
 
@@ -78,18 +85,27 @@ class EstoqueService:
     def remover_cliente(self, codigo):
         removerCliente = self.clientes.remover(codigo)
         if removerCliente is not None:
-            print(f"Cliente removido -> [{removerCliente.codigo}] - {removerCliente.nome}")
             self.salvar_clientes()
+            print(f"Cliente removido -> [{removerCliente.codigo}] - {removerCliente.nome}")
+            self.operacoes.push({
+                "acao" : "remover_cliente",
+                "nome" : removerCliente.nome
+            })
+            return removerCliente
         else:
             print("Cliente não encontrado.")
 
     def cadastrar_produto(self, nome, preco, quantidade):
         Codigo = self.gerar_proximo_codigo_produto()
         NovoProduto = Produto(Codigo, nome, preco, quantidade)
-        print ()
+        print()
         print (f"Produto cadastrado! {NovoProduto}")
         self.produtos.inserir_fim(NovoProduto)
         self.salvar_produtos()
+        self.operacoes.push({
+            "acao" : "cadastrar_produto",
+            "codigo" : Codigo
+        })
         return NovoProduto
 
     def listar_produtos(self):
@@ -135,7 +151,13 @@ class EstoqueService:
 
     def atualizar_estoque(self, codigo, nova_quantidade):
         ProdutoBuscado = self.produtos.buscar(codigo)
+        QuantidadeAnterior = ProdutoBuscado.quantidade
         ProdutoBuscado.quantidade = nova_quantidade
+        self.operacoes.push({
+            "acao" : "atualizar_estoque",
+            "codigo" : codigo,
+            "quantidade" : QuantidadeAnterior
+        })
         self.salvar_produtos()
         
     
@@ -143,8 +165,28 @@ class EstoqueService:
         produto_removido = self.produtos.remover(codigo)
         if produto_removido is not None:
             print(f"Produto removido -> [{produto_removido.codigo}] - {produto_removido.nome}")
-            self.salvar_produtos()
-            return produto_removido
+            
+            if produto_removido.quantidade == 0:
+                produto_removido.quantidade += 1
+                self.operacoes.push({
+                                "acao" : "remover_produto",
+                                "nome" : produto_removido.nome,
+                                "preco" : produto_removido.preco,
+                                "quantidade" : produto_removido.quantidade
+                            })
+                self.salvar_produtos()
+                return produto_removido
+            
+            else:
+                self.operacoes.push({
+                                "acao" : "remover_produto",
+                                "nome" : produto_removido.nome,
+                                "preco" : produto_removido.preco,
+                                "quantidade" : produto_removido.quantidade
+                            })
+                self.salvar_produtos()
+                return produto_removido
+
         else:
             print("Produto não encontrado.")
 
@@ -169,11 +211,18 @@ class EstoqueService:
             print("Quantidade em estoque insuficiente.")
             return
 
-        codigo_venda = self.gerar_proximo_codigo_venda()
+        CodigoVenda = self.gerar_proximo_codigo_venda()
         itens=[{"codigo_produto": produto.codigo, "quantidade": quantidade, "preco_unitario": produto.preco}]
-        venda = Venda(codigo_venda, cliente.codigo, itens)  
+        venda = Venda(CodigoVenda, cliente.codigo, itens)  
         produto.quantidade -= quantidade
         self.vendas.enqueue(venda)
+
+        self.operacoes.push({
+            "acao" : "realizar_venda_exemplo",
+            "codigo_venda" : CodigoVenda,
+            "itens" : itens
+        })
+
         self.salvar_produtos()
         self.salvar_vendas()
         print(f"Venda realizada com sucesso! {venda}")
@@ -309,7 +358,61 @@ class EstoqueService:
         return ProdutoBuscar
 
     def desfazer_ultima_operacao(self):
-        pass
+        if self.operacoes.is_empty():
+            print("Não há operações recentes para desfazer")
+            return None
+
+        UltimaOperação = self.operacoes.pop()
+
+        print ()
+        print ("=======DESFAZENDO OPERAÇÃO=======")
+        
+        if UltimaOperação["acao"] == "cadastrar_cliente":
+            print ()
+            self.remover_cliente(UltimaOperação["codigo"])
+            print ("Ação Desfeita: O ultimo cliente CADASTRADO foi REMOVIDO.")
+
+        elif UltimaOperação["acao"] == "remover_cliente":
+            print ()
+            self.cadastrar_cliente(UltimaOperação["nome"])
+            print ("Ação Desfeita -> O ultimo cliente REMOVIDO  do sistema foi CADASTRADO novamente.")
+
+        elif UltimaOperação["acao"] == "cadastrar_produto":
+            self.remover_produto(UltimaOperação["codigo"])
+            print ("Ação Desfeita -> O ultimo produto CADASTRADO foi REMOVIDO")
+
+        elif UltimaOperação["acao"] == "remover_produto":
+            nome = UltimaOperação["nome"]
+            preco = UltimaOperação["preco"]
+            quantidade = UltimaOperação["quantidade"]
+            print ()
+            self.cadastrar_produto(nome, preco, quantidade)
+            print ("Ação Desfeita -> O ultimo Produto REMOVIDO foi CADASTRADO novamente.")  
+
+        elif UltimaOperação["acao"] == "atualizar_estoque":
+            codigo = UltimaOperação["codigo"]
+            quantidade = UltimaOperação["quantidade"]
+            self.atualizar_estoque(codigo, quantidade)
+            print ("Ação Desfeita -> foi RETORNADA a quantidade ANTERIOR do ultimo produto que teve a sua quantidade atualizada.")
+
+        elif UltimaOperação["acao"] == "realizar_venda_exemplo":
+            for item in UltimaOperação["itens"]:
+                produto = self.produtos.buscar(item["codigo_produto"])
+                if produto is not None:
+                    produto.quantidade += item ["quantidade"]
+
+            VendasAtualizadas = Fila()
+            for venda in self.vendas.listar():
+                if venda.codigo != UltimaOperação["codigo_venda"]:
+                    VendasAtualizadas.enqueue(venda)
+
+            self.vendas = VendasAtualizadas
+
+            self.salvar_produtos()
+            self.salvar_vendas()
+
+            print ()
+            print (f"Ação Desfeita -> A venda ID: {UltimaOperação["codigo_venda"]} foi CANCELADA e os itens retornaram ao estoque.")
 
     def salvar_clientes(self):
         self.persistencia.salvar_clientes(self.clientes.listar())
