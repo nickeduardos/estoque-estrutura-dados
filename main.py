@@ -68,13 +68,13 @@ def executar_opcao(opcao, service):
         service.remover_cliente(ler_inteiro("Informe o código do cliente a ser removido: "))
         
     elif opcao == 5:
-        NomeProduto = input ("Informe o nome do produto que deseja cadastrar: ")
+        nome = input ("Informe o nome do produto que deseja cadastrar: ")
         print()
-        Preco = float (input ("Digite o valor do produto: "))
+        preco = float (input ("Digite o valor do produto: "))
         print()
-        Quantidade = int (input ("Digite a quantidade do produto em estoque: "))
+        quantidade = int (input ("Digite a quantidade do produto em estoque: "))
 
-        service.cadastrar_produto(NomeProduto, Preco, Quantidade)
+        service.cadastrar_produto(nome, preco, quantidade)
 
     elif opcao == 6:
         service.listar_produtos()
@@ -147,7 +147,7 @@ def executar_opcao(opcao, service):
         service.produto_mais_vendido()
 
     elif opcao == 21:
-        pass
+        service.desfazer_ultima_operacao()
 
     else:
         print("Opcao invalida. Tente novamente.")
