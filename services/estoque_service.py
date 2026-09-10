@@ -200,44 +200,98 @@ class EstoqueService:
         else:
             print("Produto não encontrado.")
 
-    def realizar_venda_exemplo(self, codigo_cliente, codigo_produto, quantidade):
+    def realizar_venda_exemplo(self, codigo_cliente, itens):
+            
         cliente = self.clientes.buscar(codigo_cliente)
-        produto = self.produtos.buscar(codigo_produto)
-        
 
         if cliente is None:
             print("Cliente não encontrado.")
-            return
-        
-        if produto is None:
-            print("Produto não encontrado.")
-            return
+            return None
 
-        if quantidade <= 0:
-            print("Quantidade inválida.")
-            return
+        itens_venda = []
 
-        if quantidade > produto.quantidade:
-            print("Quantidade em estoque insuficiente.")
-            return
+        for item in itens:
+            codigo_produto = item["codigo_produto"]
+            quantidade = item["quantidade"]
+
+            produto = self.produtos.buscar(codigo_produto)
+
+            if produto is None:
+                print(
+                    f"Produto de código {codigo_produto} "
+                    f"não encontrado."
+                )
+                return None
+
+            if quantidade <= 0:
+                print(
+                    f"Insira uma quantidade válida "
+                    f"para o produto {produto.nome}."
+                )
+                return None
+
+            if quantidade > produto.quantidade:
+                print(
+                    f"Quantidade em estoque insuficiente para o produto "
+                    f"{codigo_produto}. "
+                    f"Quantidade em estoque: "
+                    f"{produto.quantidade}."
+                )
+                return None
+
+            for item_existente in itens_venda:
+                if item_existente["codigo_produto"] == codigo_produto:
+                    print(
+                        f"Erro! O produto de código "
+                        f"{codigo_produto} já foi "
+                        f"adicionado a venda."
+                    )
+                    return None
+
+            itens_venda.append({
+                "codigo_produto": produto.codigo,
+                "quantidade": quantidade,
+                "preco_unitario": produto.preco
+            })
+
+        if len(itens_venda) == 0:
+            print("Nenhum item adicionado a venda.")
+            return None
 
         CodigoVenda = self.gerar_proximo_codigo_venda()
-        itens=[{"codigo_produto": produto.codigo, "quantidade": quantidade, "preco_unitario": produto.preco}]
-        venda = Venda(CodigoVenda, cliente.codigo, itens)  
-        produto.quantidade -= quantidade
+
+        venda = Venda(
+            CodigoVenda,
+            cliente.codigo,
+            itens_venda
+        )
+
+        for item in itens_venda:
+            produto = self.produtos.buscar(
+                item["codigo_produto"]
+            )
+
+            produto.quantidade -= item["quantidade"]
+
         self.vendas.enqueue(venda)
 
         self.operacoes.push({
-            "acao" : "realizar_venda_exemplo",
-            "codigo_venda" : CodigoVenda,
-            "itens" : itens
+            "acao": "realizar_venda_exemplo",
+            "codigo_venda": CodigoVenda,
+            "codigo_cliente": cliente.codigo,
+            "itens": itens_venda
         })
 
         self.salvar_produtos()
         self.salvar_vendas()
-        print(f"Venda realizada com sucesso! {venda}")
-        
+
+        print(
+            f"Venda realizada com sucesso! "
+            f"Código da venda: {CodigoVenda}"
+        )
+
         return venda
+            
 
     def listar_vendas(self):
         print()
@@ -374,6 +428,7 @@ class EstoqueService:
 
         UltimaOperação = self.operacoes.pop()
 
+
         print ()
         print ("=======DESFAZENDO OPERAÇÃO=======")
         
@@ -407,11 +462,13 @@ class EstoqueService:
 
         elif UltimaOperação["acao"] == "realizar_venda_exemplo":
             for item in UltimaOperação["itens"]:
-                produto = self.produtos.buscar(item["codigo_produto"])
+                produto= self.produtos.buscar(item["codigo_produto"])
+
                 if produto is not None:
-                    produto.quantidade += item ["quantidade"]
+                    produto.quantidade += item["quantidade"]
 
             VendasAtualizadas = Fila()
+
             for venda in self.vendas.listar():
                 if venda.codigo != UltimaOperação["codigo_venda"]:
                     VendasAtualizadas.enqueue(venda)
@@ -421,8 +478,43 @@ class EstoqueService:
             self.salvar_produtos()
             self.salvar_vendas()
 
-            print ()
-            print (f"Ação Desfeita -> A venda ID: {UltimaOperação["codigo_venda"]} foi CANCELADA e os itens retornaram ao estoque.")
+            self.operacoes.push({
+                "acao": "remover_venda",
+                "codigo_venda": UltimaOperação["codigo_venda"],
+                "cliente_codigo": UltimaOperação["codigo_cliente"],
+                "itens": UltimaOperação["itens"]
+            })
+            print ("Ação Desfeita -> A ultima venda realizada foi REMOVIDA do sistema e o estoque dos produtos foi RESTAURADO.")
+
+        elif UltimaOperação["acao"] == "remover_venda":
+            codigo_venda = UltimaOperação["codigo_venda"]
+            cliente_codigo = UltimaOperação["cliente_codigo"]
+            itens = UltimaOperação["itens"]
+
+            venda = Venda(codigo_venda, cliente_codigo, itens)
+
+            self.vendas.enqueue(venda)
+
+            for item in itens:
+                produto = self.produtos.buscar(item["codigo_produto"])
+
+                if produto is not None:
+                    produto.quantidade -= item["quantidade"]
+
+            self.salvar_produtos()
+            self.salvar_vendas()
+
+            self.operacoes.push({
+                "acao": "realizar_venda_exemplo",
+                "codigo_venda": codigo_venda,
+                "codigo_cliente": cliente_codigo,
+                "itens": itens
+            })
+
+            print()
+
+            print("Ação Desfeita -> A ultima venda removida foi RESTAURADA no sistema e o estoque dos produtos foi ATUALIZADO.")
+           
 
     def salvar_clientes(self):
         self.persistencia.salvar_clientes(self.clientes.listar())
@@ -432,3 +524,21 @@ class EstoqueService:
 
     def salvar_vendas(self):
         self.persistencia.salvar_vendas(self.vendas.listar())
+
+
+    def verificar_item_venda(self,codigo_produto,quantidade):
+        produto = self.produtos.buscar(codigo_produto)
+
+        if produto is None:
+            print(f"Erro!!! Produto de código {codigo_produto} não cadastrado.")
+            return False
+
+        if quantidade <=0:
+            print(f"Erro!!! Insira uma quantidade válida para o produto {produto.nome}.")
+            return False
+
+        if quantidade > produto.quantidade:
+            print(f"Erro!!! Quantidade em estoque insuficiente para o produto {codigo_produto}. Quantidade em estoque: {produto.quantidade}.")
+            return False
+
+        return True

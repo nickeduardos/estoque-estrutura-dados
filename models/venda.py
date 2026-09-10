@@ -23,7 +23,7 @@ class Venda:
 
         for item in self.itens:
             total += item["quantidade"] * item["preco_unitario"]
-            return total
+        return total
 
     def itens_para_texto(self):
         partes = []
