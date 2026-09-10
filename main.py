@@ -301,7 +301,29 @@ def executar_opcao(opcao, service):
         service.buscar_produto_binario(ler_inteiro("Digite o Id do produto que deseja buscar: "))
         
     elif opcao == 13:
-        service.realizar_venda_exemplo(ler_inteiro("Informe o código do cliente: "), ler_inteiro("Informe o código do produto: "), ler_inteiro("Informe a quantidade: "))
+        codigo_cliente = ler_inteiro("Digite o código do cliente: ")
+
+        itens = []
+
+        while True:
+            codigo_produto = ler_inteiro("Digite o código do produto/novo produto a ser adicionado (ou 0 para finalizar a compra): ")
+            if codigo_produto == 0:
+                break
+
+            quantidade = ler_inteiro("Digite a quantidade do produto: ")
+
+            if service.verificar_item_venda(codigo_produto, quantidade):
+        
+                itens.append({"codigo_produto": codigo_produto,
+                          "quantidade": quantidade})
+
+                print(f"Produto [{codigo_produto}] adicionado à venda com quantidade {quantidade}.")
+
+        if len(itens) == 0:
+            print("Nenhum item adicionado à venda.")
+
+        else:
+            service.realizar_venda_exemplo(codigo_cliente, itens)
         
 
     elif opcao == 14:
