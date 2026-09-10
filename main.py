@@ -248,7 +248,46 @@ def executar_opcao(opcao, service):
                     break
 
     elif opcao == 9:
-        service.remover_produto(ler_inteiro("Informe o código do produto a ser removido: "))
+        rodando = True
+        while rodando:
+            codigo = input("Informe o código do produto a ser removido ou [0] para RETORNAR AO MENU: ")
+            if codigo == "0":
+                print ()
+
+                certeza = True
+                while certeza:
+
+                    certeza = int (input ('''VOLTAR PARA O MENU?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        rodando = False
+                        certeza = False
+
+                    elif certeza == 2:
+                        input ("Pressione ENTER para VOLTAR")
+                        certeza = False
+                        rodando = True
+
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
+                                                
+            else:
+                if len(codigo) == 0:
+                    print ()
+                    print ("Erro! O campo de digito não pode estar vazio.")
+                    print ()
+                    input ("Pressione ENTER para tentar novamente.")
+                    print ()
+
+                else:
+                    codigo = int (codigo)
+                    service.remover_produto(codigo)
+                    break
 
     elif opcao == 10:
         service.listar_produtos_inverso()
@@ -292,7 +331,20 @@ def executar_opcao(opcao, service):
         service.produto_mais_vendido()
 
     elif opcao == 21:
-        service.desfazer_ultima_operacao()
+        print ()
+        certeza = input ('''Você deseja DESFAZER A ULTIMA OPERAÇÃO?: 
+[1] -> SIM
+[2] -> NÃO, RETORNAR AO MENU
+''')
+        certeza = int (certeza)
+        if certeza == 1:
+            service.desfazer_ultima_operacao()
+
+        elif certeza == 2:
+            return
+
+        else:
+            print ("Erro! OPÇÃO INVÁLIDA, Processo Cancelado!")
 
     else:
         print("Opcao invalida. Tente novamente.")
