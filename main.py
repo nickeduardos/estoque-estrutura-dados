@@ -301,29 +301,57 @@ def executar_opcao(opcao, service):
         service.buscar_produto_binario(ler_inteiro("Digite o Id do produto que deseja buscar: "))
         
     elif opcao == 13:
-        codigo_cliente = ler_inteiro("Digite o código do cliente: ")
+        rodando = True
+        while rodando:
+            codigo_cliente = ler_inteiro("Digite o código do cliente ou [0] para RETORNAR AO MENU: ")
+            if codigo_cliente == 0:
+                print ()
+                
+                certeza = True
+                while certeza:
+                    certeza = int (input ('''VOLTAR PARA O MENU?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        rodando = False
+                        certeza = False
 
-        itens = []
+                    elif certeza == 2:
+                        input ("Pressione ENTER para VOLTAR")
+                        certeza = False
+                        rodando = True
 
-        while True:
-            codigo_produto = ler_inteiro("Digite o código do produto/novo produto a ser adicionado (ou 0 para finalizar a compra): ")
-            if codigo_produto == 0:
-                break
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
+                
+            else:
+                itens = []
 
-            quantidade = ler_inteiro("Digite a quantidade do produto: ")
+                while True:
+                    codigo_produto = ler_inteiro("Digite o código do produto/novo produto a ser adicionado (ou 0 para finalizar a compra): ")
+                    if codigo_produto == 0:
+                        break
 
-            if service.verificar_item_venda(codigo_produto, quantidade):
-        
-                itens.append({"codigo_produto": codigo_produto,
-                          "quantidade": quantidade})
+                    quantidade = ler_inteiro("Digite a quantidade do produto: ")
 
-                print(f"Produto [{codigo_produto}] adicionado à venda com quantidade {quantidade}.")
+                    if service.verificar_item_venda(codigo_produto, quantidade):
+                
+                        itens.append({"codigo_produto": codigo_produto,
+                                "quantidade": quantidade})
 
-        if len(itens) == 0:
-            print("Nenhum item adicionado à venda.")
+                        print(f"Produto [{codigo_produto}] adicionado à venda com quantidade {quantidade}.")
 
-        else:
-            service.realizar_venda_exemplo(codigo_cliente, itens)
+                if len(itens) == 0:
+                    print("Nenhum item adicionado à venda.")
+
+                else:
+                    service.realizar_venda_exemplo(codigo_cliente, itens)
+                    break
+                    
         
 
     elif opcao == 14:
@@ -376,7 +404,8 @@ def main():
 
     limpar_tela()
 
-    while True:
+    rodando = True
+    while rodando:
         mostrar_menu()
 
         print()
@@ -385,11 +414,32 @@ def main():
             opcao = ler_inteiro("Escolha uma opcao: ")
 
             if opcao == 0:
-                print("Sistema encerrado.")
-                break
+                certeza = True
+                while certeza:
+                    print ()
+                    certeza = int (input ('''Você realmente deseja fechar o programa?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        print("Sistema encerrado.")
+                        rodando = False
+                        certeza = False
+                        
+                    elif certeza == 2:
+                        print ()
+                        print ("Retornando ao menu principal...")
+                        certeza = False
+                        rodando = True
 
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
 
-            executar_opcao(opcao, service)
+            else:
+                executar_opcao(opcao, service)
 
         except ValueError as erro:
             print(f"Erro: {erro}")
