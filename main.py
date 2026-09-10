@@ -53,8 +53,47 @@ def mostrar_menu():
 
 def executar_opcao(opcao, service):
     if opcao == 1:
-        nome = input("Informe o nome do cliente: ")
-        service.cadastrar_cliente(nome)
+        rodando = True
+        while rodando:
+
+            print ()
+            nome = input("Informe o nome do cliente ou [0] para RETORNAR AO MENU: ")
+
+            if nome == "0":
+                print ()
+
+                certeza = True
+                while certeza:
+                    certeza = int (input ('''VOLTAR PARA O MENU?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        rodando = False
+                        certeza = False
+
+                    elif certeza == 2:
+                        input ("Pressione ENTER para VOLTAR")
+                        certeza = False
+                        rodando = True
+
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
+
+            else:
+                if len(nome) == 0:
+                    print ()
+                    print ("Erro! O nome não pode estar vazio.")
+                    print ()
+                    input ("Pressione ENTER para tentar novamente.")
+                    print ()
+
+                else:
+                    service.cadastrar_cliente(nome)
+                    break
 
     elif opcao == 2:
         service.listar_clientes()
@@ -65,16 +104,88 @@ def executar_opcao(opcao, service):
         service.buscar_cliente(ler_inteiro("Informe o código do cliente: "))
 
     elif opcao == 4:
-        service.remover_cliente(ler_inteiro("Informe o código do cliente a ser removido: "))
+        rodando = True
+        while rodando:
+
+            menu = input ("Informe o código do cliente a ser removido ou [0] para VOLTAR AO MENU: ")
+            
+            if menu == "0":
+                print ()
+
+                certeza = True
+                while certeza:
+
+                    certeza = int (input ('''VOLTAR PARA O MENU?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        rodando = False
+                        certeza = False
+
+                    elif certeza == 2:
+                        input ("Pressione ENTER para VOLTAR")
+                        certeza = False
+                        rodando = True
+
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
+
+            else:
+                menu = int(menu)
+                service.remover_cliente(menu)
+                break
         
     elif opcao == 5:
-        nome = input ("Informe o nome do produto que deseja cadastrar: ")
-        print()
-        preco = float (input ("Digite o valor do produto: "))
-        print()
-        quantidade = int (input ("Digite a quantidade do produto em estoque: "))
+        rodando = True
+        while rodando:
+            nome = input ("Informe o nome do produto que deseja cadastrar ou [0] para RETORNAR AO MENU: ")
 
-        service.cadastrar_produto(nome, preco, quantidade)
+            if nome == "0":
+                print ()
+
+                certeza = True
+                while certeza:
+
+                    certeza = int (input ('''VOLTAR PARA O MENU?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        rodando = False
+                        certeza = False
+
+                    elif certeza == 2:
+                        input ("Pressione ENTER para VOLTAR")
+                        certeza = False
+                        rodando = True
+
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
+                                    
+            else:
+                print()
+                preco = input ("Digite o valor do produto: ")
+                print()
+                quantidade = input ("Digite a quantidade do produto em estoque: ")
+
+                if len(preco) == 0 or len(quantidade) == 0:
+                    print ()
+                    print ("Erro! os campos devem ser preenchidos!")
+                    input ("Pressione ENTER para retornar")
+                    rodando = True
+                
+                else:
+                    preco = float (preco)
+                    quantidade = int (quantidade)
+                    service.cadastrar_produto(nome, preco, quantidade)
+                    break
 
     elif opcao == 6:
         service.listar_produtos()
@@ -91,16 +202,50 @@ def executar_opcao(opcao, service):
         service.listar_produtos()
         
         print()
-        
-        codigo = ler_inteiro("Digite o código do produto que deseja atualizar: ")
-        print()
-        NovaQuantidade = ler_inteiro("Digite a nova quantidade do produto: ")
-        
-        service.atualizar_estoque(codigo, NovaQuantidade)
-        
-        print()
-        
-        print(f"Produto [{codigo}] Atualizado para {NovaQuantidade} Unidades em estoque")
+
+        rodando = True
+        while rodando:
+            codigo = int (input ("Digite o código do produto que deseja atualizar ou [0] Para RETORNAR AO MENU: "))
+            if codigo == 0:
+                print ()
+
+                certeza = True
+                while certeza:
+
+                    certeza = int (input ('''VOLTAR PARA O MENU?
+[1] SIM
+[2] NÃO
+'''))
+                    if certeza == 1:
+                        rodando = False
+                        certeza = False
+
+                    elif certeza == 2:
+                        input ("Pressione ENTER para VOLTAR")
+                        certeza = False
+                        rodando = True
+
+                    else:
+                        print ()
+                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                        certeza = True
+                        rodando = True
+                                            
+            else:
+                codigo = int (codigo)
+                print()
+                NovaQuantidade = ler_inteiro("Digite a nova quantidade do produto: ")
+                
+                retorno = service.atualizar_estoque(codigo, NovaQuantidade)
+
+                if retorno == None:
+                    rodando = True
+                
+                elif retorno == "certo":
+                    print()
+                    
+                    print(f"Produto [{codigo}] Atualizado para {NovaQuantidade} Unidades em estoque")
+                    break
 
     elif opcao == 9:
         service.remover_produto(ler_inteiro("Informe o código do produto a ser removido: "))

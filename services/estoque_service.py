@@ -149,16 +149,26 @@ class EstoqueService:
             print("Produto Encontrado!")
             print (f"[{BuscarProduto.codigo}] - {BuscarProduto.nome}")
 
-    def atualizar_estoque(self, codigo, nova_quantidade):
+    def atualizar_estoque(self, codigo, nova_quantidade):    
         ProdutoBuscado = self.produtos.buscar(codigo)
-        QuantidadeAnterior = ProdutoBuscado.quantidade
-        ProdutoBuscado.quantidade = nova_quantidade
-        self.operacoes.push({
-            "acao" : "atualizar_estoque",
-            "codigo" : codigo,
-            "quantidade" : QuantidadeAnterior
-        })
-        self.salvar_produtos()
+        Validacao = buscar_produto_por_id (self.produtos.listar(), codigo)
+
+        if Validacao not in self.produtos.listar():
+            print ()
+            print ("Erro! Não existe nenhum produto cadastrado nesse Id.")
+            print ()
+            return None
+
+        else:
+            QuantidadeAnterior = ProdutoBuscado.quantidade
+            ProdutoBuscado.quantidade = nova_quantidade
+            self.operacoes.push({
+                "acao" : "atualizar_estoque",
+                "codigo" : codigo,
+                "quantidade" : QuantidadeAnterior
+            })
+            self.salvar_produtos()
+            return "certo"
         
     
     def remover_produto(self, codigo):
