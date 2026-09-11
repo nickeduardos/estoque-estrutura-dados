@@ -116,7 +116,7 @@ def executar_opcao(opcao, service):
             limpar_tela()
             print ("=======REMOVER CLIENTE=======")
             print ()
-            print (service.listar_clientes())
+            service.listar_clientes()
             menu = input ("Informe o ID do cliente a ser removido ou [0] para VOLTAR AO MENU: ")
             
             if menu == "0":
@@ -435,6 +435,13 @@ def executar_opcao(opcao, service):
                     codigo_produto = ler_inteiro("Digite o código do produto/novo produto a ser adicionado (ou 0 para finalizar a compra): ")
                     if codigo_produto == 0:
                         break
+                    produto = service.produtos.buscar(codigo_produto) 
+
+                    if produto is None:
+                        print()
+                        print(f"Produto com código [{codigo_produto}] não encontrado.")
+                        input("Pressione ENTER para tentar novamente.")
+                        continue
 
                     quantidade = ler_inteiro("Digite a quantidade do produto: ")
 
