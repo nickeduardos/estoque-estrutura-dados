@@ -151,52 +151,108 @@ def executar_opcao(opcao, service):
 
         
     elif opcao == 5:
+
         rodando = True
+
         while rodando:
+
             limpar_tela()
+
             print ("=======CADASTRAR PRODUTO=======")
+
             nome = input ("Informe o nome do produto que deseja cadastrar ou [0] para RETORNAR AO MENU: ")
 
             if nome == "0":
+
                 print ()
 
                 certeza = True
+
                 while certeza:
 
                     certeza = int (input ('''VOLTAR PARA O MENU?
+
 [1] SIM
+
 [2] NÃO
+
 '''))
+
                     if certeza == 1:
+
                         rodando = False
                         certeza = False
 
                     elif certeza == 2:
+
                         input ("Pressione ENTER para VOLTAR")
+
                         certeza = False
                         rodando = True
 
                     else:
+
                         print ()
+
                         input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+
                         certeza = True
                         rodando = True
-                                    
-            else:
-                preco = input ("Digite o valor do produto: R$ ")
-                quantidade = input ("Digite a quantidade do produto em estoque: ")
 
-                if len(preco) == 0 or len(quantidade) == 0:
-                    print ()
-                    print ("Erro! os campos devem ser preenchidos!")
-                    input ("Pressione ENTER para retornar")
-                    rodando = True
-                
+            else:
+
+                produto_existente = service.buscar_produto_por_nome(nome)
+
+                if produto_existente is not None:
+
+                    quantidade = input(f"Produto [{produto_existente.nome}] disponível em estoque. Informe a quantidade a ser adicionada: ")
+
+                    if len(quantidade) == 0:
+
+                        print()
+
+                        print("Erro! os campos devem ser preenchidos.")
+
+                        input("Pressione ENTER para retornar")
+
+                        rodando = True
+
+                    else:
+
+                        quantidade = int(quantidade)
+
+                        service.cadastrar_produto(
+                            nome,
+                            quantidade=quantidade
+                        )
+
+                        break
+
                 else:
-                    preco = float (preco)
-                    quantidade = int (quantidade)
-                    service.cadastrar_produto(nome, preco, quantidade)
-                    break
+
+                    preco = input("Digite o preço do produto R$: ")
+
+                    quantidade = input("Digite a quantidade do produto: ")
+
+                    if len(preco) == 0 or len(quantidade) == 0:
+
+                        print ()
+
+                        print ("Erro! os campos devem ser preenchidos.")
+
+                        input ("Pressione ENTER para retornar")
+
+                        rodando = True
+
+                    else:
+
+                        preco = float(preco)
+
+                        quantidade = int(quantidade)
+
+                        service.cadastrar_produto(nome, preco, quantidade)
+
+                        break
 
 
     elif opcao == 6:

@@ -94,16 +94,43 @@ class EstoqueService:
         else:
             print("Cliente não encontrado.")
 
-    def cadastrar_produto(self, nome, preco, quantidade):
-        Codigo = self.gerar_proximo_codigo_produto()
-        NovoProduto = Produto(Codigo, nome, preco, quantidade)
+    def cadastrar_produto(self, nome, preco = None, quantidade = None):
+        produto_existente = self.buscar_produto_por_nome(nome)
+        if produto_existente is not None:
+            quantidade_adicionada = quantidade
+            produto_existente.quantidade += quantidade_adicionada
+
+            self.operacoes.push({
+
+                "acao" : "atualizar_estoque",
+                "codigo" : produto_existente.codigo,
+                "quantidade" : produto_existente.quantidade - quantidade
+
+            })
+
+            self.salvar_produtos()
+
+            print()
+            print(f"Produto informado ({produto_existente.nome}) já cadastrado. A quantidade em estoque foi atualizada para {produto_existente.quantidade} unidades.")
+
+            print(f"Estoque atual de {produto_existente.nome}: {produto_existente.quantidade} unidades.")
+
+            return produto_existente
+
+        Codigo=self.gerar_proximo_codigo_produto()
+
+        NovoProduto= Produto(Codigo, nome, preco, quantidade)
+
         print()
-        print (f"Produto cadastrado! {NovoProduto}")
+        print("Produto Cadastrado! {NovoProduto}")
+
         self.produtos.inserir_fim(NovoProduto)
         self.salvar_produtos()
+
         self.operacoes.push({
-            "acao" : "cadastrar_produto",
-            "codigo" : Codigo
+
+            "acao": "cadastrar_produto",
+            "codigo": Codigo,
         })
         return NovoProduto
 
@@ -447,7 +474,23 @@ class EstoqueService:
         elif UltimaOperação["acao"] == "atualizar_estoque":
             codigo = UltimaOperação["codigo"]
             quantidade = UltimaOperação["quantidade"]
-            self.atualizar_estoque(codigo, quantidade)
+            produto = self.produtos.buscar(codigo)
+
+            if produto is not None:
+                quantidade_atual = produto.quantidade
+                produto.quantidade = quantidade
+
+                self.operacoes.push({
+
+                    "acao": "atualizar_estoque",
+                    "codigo": codigo,
+                    "quantidade": quantidade_atual
+
+                })
+
+                self.salvar_produtos()
+
+            print()
             print ("Ação Desfeita -> foi RETORNADA a quantidade ANTERIOR do ultimo produto que teve a sua quantidade atualizada.")
 
         elif UltimaOperação["acao"] == "realizar_venda_exemplo":
@@ -532,3 +575,9 @@ class EstoqueService:
             return False
 
         return True
+
+    def buscar_produto_por_nome(self,nome):
+        for produto in self.produtos.listar():
+            if produto.nome.strip().lower() == nome.strip().lower():
+                return produto
+        return None
