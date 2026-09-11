@@ -1,11 +1,8 @@
 codigo,nome,preco,quantidade
-1,Caneta azul,2.5,34
-2,Caderno universitario,18.9,10
-3,Mochila simples,79.9,6
-4,Lapis HB,1.2,100
-5,Borracha branca,1.8,60
-6,Estojo escolar,24.5,12
-7,Regua 30cm,3.75,35
-8,Agenda 2026,32.0,20
-9,Marcador de texto,6.5,27
-10,Apontador,2.2,45
+1,Notebook,4000.0,20
+2,Lapizeira,5.0,93
+3,Borracha,2.0,150
+4,Cadeira Gamer,500.0,36
+5,Microfone,200.0,50
+6,Mousepad,150.0,78
+7,Teclado,250.0,72

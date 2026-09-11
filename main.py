@@ -100,7 +100,7 @@ def executar_opcao(opcao, service):
     elif opcao == 2:
         limpar_tela()
         print ("=======LISTA DE CLIENTES=======")
-        print ()
+        print()
         service.listar_clientes()
 
 
@@ -258,7 +258,7 @@ def executar_opcao(opcao, service):
     elif opcao == 6:
         limpar_tela()
         print ("=======LISTA DE PRODUTOS=======")
-        print ()
+        print()
         service.listar_produtos()
 
 
@@ -380,11 +380,15 @@ def executar_opcao(opcao, service):
 
     elif opcao == 10:
         limpar_tela()
+        print ("=======LISTA DE PRODUTOS INVERSA=======")   
+        print()
         service.listar_produtos_inverso()
 
         
     elif opcao == 11:
         limpar_tela()
+        print ("=======LISTA DE PRODUTOS ORDENADOS POR ID=======")
+        print()
         service.listar_produtos_ordenados_por_id()
 
 
@@ -462,6 +466,8 @@ def executar_opcao(opcao, service):
                     
     elif opcao == 14:
         limpar_tela()
+        print ("=======LISTA DE VENDAS=======")
+        print()
         service.listar_vendas()
         
 
