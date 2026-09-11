@@ -70,8 +70,14 @@ class EstoqueService:
 
 
     def listar_clientes(self):
-        for cliente in self.clientes.listar():
-            print (f"ID [{cliente.codigo}] - {cliente.nome}")
+        clientes=self.clientes.listar()
+
+        if len(clientes) == 0:
+            print("Nenhum cliente cadastrado até o momento.")
+            return
+
+        for cliente in clientes:
+            print(f"ID [{cliente.codigo}] - {cliente.nome}")
 
     def buscar_cliente(self, codigo):
         buscarCliente = self.clientes.buscar(codigo)
@@ -135,20 +141,33 @@ class EstoqueService:
         return NovoProduto
 
     def listar_produtos(self):
-        for produto in self.produtos.listar():
-            print (f"ID [{produto.codigo}] - {produto.nome} | {produto.quantidade} unidades em estoque.")
+        produtos=self.produtos.listar()
+
+        if len(produtos) == 0:
+            print("Nenhum produto cadastrado até o momento.")
+            return
+
+        for produto in produtos:
+            print(f"ID [{produto.codigo}] - {produto.nome} | R$ {produto.preco} | {produto.quantidade} unidades em estoque")
 
     def listar_produtos_inverso(self):
-        print("=======LISTA DE PRODUTOS INVERSA=======")
-        print ()
+        produtos=self.produtos.listar_inverso()
+
+        if len(produtos) == 0:
+            print("Nenhum produto cadastrado até o momento.")
+            return
+        
         for produto in self.produtos.listar_inverso():
             print (f"ID [{produto.codigo}] - {produto.nome} | {produto.quantidade} unidades em estoque.")
         
 
     def listar_produtos_ordenados_por_id(self):
-        print ("=======LISTA DE PRODUTOS ORDENADOS POR ID=======")
-        print ()
         ProdutosOrdenados = ordenar_produtos_por_id(self.produtos.listar())
+
+        if len(ProdutosOrdenados) == 0:
+            print("Nenhum produto cadastrado até o momento.")
+            return
+        
         for produto in ProdutosOrdenados:
             print (f"[{produto.codigo}] -> {produto.nome} | R$ {produto.preco} | {produto.quantidade} unidades em estoque")
 
@@ -318,19 +337,20 @@ class EstoqueService:
             
 
     def listar_vendas(self):
-        print ("=======LISTA DE VENDAS=======")
-        print ()
+        vendas=self.vendas.listar()
 
-        for venda in self.vendas.listar():
-            if venda is not None:
-                cliente = self.clientes.buscar(venda.codigo_cliente)
+        if len(vendas) == 0:
+            print("Nenhuma venda registrada até o momento.")
+            return
 
-                if cliente is not None:
-                    print(f"venda {venda.codigo} | ID [{cliente.codigo}] - {cliente.nome} | Total R$ {venda.valor_total:.2f}")
+        for venda in vendas:
+            print(f"Venda {venda.codigo} - Cliente [{venda.codigo_cliente}] | Total R$ {venda.valor_total:.2f}")
         
 
     def primeira_venda(self):
         if self.vendas.is_empty():
+            print("=======PRIMEIRA VENDA REGISTRADA=======")
+            print()
             print("Não há vendas registradas.")
             return None
         primeira_venda = self.vendas.front()
@@ -347,6 +367,7 @@ class EstoqueService:
             total += produto.preco * produto.quantidade
 
         print("=======VALOR TOTAL EM ESTOQUE=======")
+        print()
         print(f"Valor total em estoque: R$ {total:.2f}")
 
         return total
@@ -358,13 +379,19 @@ class EstoqueService:
             total += venda.valor_total
 
         print("=======VALOR TOTAL DAS VENDAS=======")
+        print()
         print(f"Valor total das vendas: R$ {total:.2f}")
 
         return total
 
     def clientes_e_valores_totais_gastos(self):
+        clientes=self.clientes.listar()
         print ("=======CLIENTES E VALORES TOTAIS GASTOS=======")
         print ()
+
+        if len(clientes) == 0:
+            print("Nenhum cliente cadastrado ou nenhuma venda registrada até o momento.")
+            return
 
         for cliente in self.clientes.listar():
             total=0
@@ -390,10 +417,13 @@ class EstoqueService:
                 clienteMaisGastou = cliente
 
         if clienteMaisGastou is None:
+            print("=======CLIENTE QUE MAIS GASTOU=======")
+            print()
             print("Nenhum registro de compra encontrado.")
             return None
 
         print("=======CLIENTE QUE MAIS GASTOU=======")  
+        print()
         print(f"ID [{clienteMaisGastou.codigo}] - {clienteMaisGastou.nome} | Total gasto: R$ {maiorGasto:.2f}")
 
         return clienteMaisGastou
@@ -415,6 +445,8 @@ class EstoqueService:
                     TotaisVendidos[codigo] = quantidade
 
         if not TotaisVendidos:
+            print ("=======PRODUTO MAIS VENDIDO=======")
+            print ()
             print ("Nenhuma venda registrada.")
             return None
 
@@ -429,6 +461,7 @@ class EstoqueService:
         ProdutoBuscar = self.produtos.buscar(CodigoMaisVendido)
 
         print ("=======PRODUTO MAIS VENDIDO=======")
+        print()
 
         if ProdutoBuscar is not None:
             print (f"ID [{ProdutoBuscar.codigo}] - {ProdutoBuscar.nome} | Total Vendido: {MaiorQuantidade} Unidades")
