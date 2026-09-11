@@ -395,6 +395,7 @@ def executar_opcao(opcao, service):
     elif opcao == 12:
         limpar_tela()
         print("=======BUSCAR PRODUTO COM BUSCA BINARIA=======")
+        print()
         service.buscar_produto_binario(ler_inteiro("Digite o ID do produto que deseja buscar: "))
 
         
@@ -403,9 +404,11 @@ def executar_opcao(opcao, service):
         while rodando:
             limpar_tela()
             print ("=======LISTA DE CLIENTES=======")
+            print()
             service.listar_clientes()
             print ()
             print ("=======REALIZAR VENDA=======")
+            print()
 
             codigo_cliente = ler_inteiro("Digite o ID do cliente ou [0] para RETORNAR AO MENU: ")
             if codigo_cliente == 0:
@@ -434,9 +437,16 @@ def executar_opcao(opcao, service):
                 
             else:
                 itens = []
+                primeiro_produto = True
 
                 while True:
-                    codigo_produto = ler_inteiro("Digite o código do produto/novo produto a ser adicionado (ou 0 para finalizar a compra): ")
+
+                    if primeiro_produto:
+                        codigo_produto = ler_inteiro("Digite o código do produto a ser adicionado ao carrinho: ")
+
+                    else:
+                        codigo_produto = ler_inteiro("Infome o ID do próximo produto a ser adicionado "
+                                                     "OU DIGITE 0 PARA FINALIZAR A COMPRA: ")
                     if codigo_produto == 0:
                         break
                     produto = service.produtos.buscar(codigo_produto) 
@@ -454,7 +464,36 @@ def executar_opcao(opcao, service):
                         itens.append({"codigo_produto": codigo_produto,
                                 "quantidade": quantidade})
 
-                        print(f"Produto [{codigo_produto}] adicionado à venda com quantidade {quantidade}.")
+                        primeiro_produto = False
+
+                        limpar_tela()
+
+                        print()
+                        print(f"Produto [{codigo_produto}] - {produto.nome} adicionado ao carrinho.")
+                        print(f"Quantidade: {quantidade}")
+
+                        print()
+                        print("======= CARRINHO ATUAL =======")
+                        print()
+                        valor_total_carrinho=0
+
+                        for item in itens:
+                            produto_carrinho = service.produtos.buscar(item["codigo_produto"])
+                            subtotal =produto_carrinho.preco * item["quantidade"]
+                            valor_total_carrinho += subtotal
+
+                            print (f"Produto [{produto_carrinho.codigo}] - "
+                                   f"{produto_carrinho.nome} - "
+                                   f"Qtde: {item['quantidade']} - "
+                                   f"R${subtotal:.2f}")
+                            
+                        print()
+                        print(f"Valor total do carrinho R${valor_total_carrinho:.2f}")
+                        print()
+                        print("        ==============        ")
+
+                        
+                        
 
                 if len(itens) == 0:
                     print("Nenhum item adicionado à venda.")

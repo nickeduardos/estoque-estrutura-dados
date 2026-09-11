@@ -355,6 +355,7 @@ class EstoqueService:
             return None
         primeira_venda = self.vendas.front()
         print("=======PRIMEIRA VENDA REGISTRADA=======")
+        print()
         print(f"venda {primeira_venda.codigo} - Cliente [{primeira_venda.codigo_cliente}] | Total R$ {primeira_venda.valor_total:.2f}")
 
         return primeira_venda
