@@ -24,6 +24,7 @@ def imprimir_registros(registros, mensagem_vazia):
         print(registro)
 
 def mostrar_menu():
+    limpar_tela()
     print("\n==============================")
     print("SISTEMA DE ESTOQUE E VENDAS")
     print("==============================")
@@ -55,9 +56,9 @@ def executar_opcao(opcao, service):
     if opcao == 1:
         rodando = True
         while rodando:
-
-            print ()
-            nome = input("Informe o nome do cliente ou [0] para RETORNAR AO MENU: ")
+            limpar_tela()
+            print ("=======CADASTRAR CLIENTE=======")
+            nome = input ("Informe o nome do cliente ou [0] para RETORNAR AO MENU: ")
 
             if nome == "0":
                 print ()
@@ -95,19 +96,28 @@ def executar_opcao(opcao, service):
                     service.cadastrar_cliente(nome)
                     break
 
+
     elif opcao == 2:
+        limpar_tela()
+        print ("=======LISTA DE CLIENTES=======")
+        print ()
         service.listar_clientes()
 
+
     elif opcao == 3:
-        print()
-        print("=======BUSCAR CLIENTE=======")
+        limpar_tela()
+        print ("=======BUSCAR CLIENTE=======")
         service.buscar_cliente(ler_inteiro("Informe o código do cliente: "))
+
 
     elif opcao == 4:
         rodando = True
         while rodando:
-
-            menu = input ("Informe o código do cliente a ser removido ou [0] para VOLTAR AO MENU: ")
+            limpar_tela()
+            print ("=======REMOVER CLIENTE=======")
+            print ()
+            print (service.listar_clientes())
+            menu = input ("Informe o ID do cliente a ser removido ou [0] para VOLTAR AO MENU: ")
             
             if menu == "0":
                 print ()
@@ -138,10 +148,13 @@ def executar_opcao(opcao, service):
                 menu = int(menu)
                 service.remover_cliente(menu)
                 break
+
         
     elif opcao == 5:
         rodando = True
         while rodando:
+            limpar_tela()
+            print ("=======CADASTRAR PRODUTO=======")
             nome = input ("Informe o nome do produto que deseja cadastrar ou [0] para RETORNAR AO MENU: ")
 
             if nome == "0":
@@ -170,9 +183,7 @@ def executar_opcao(opcao, service):
                         rodando = True
                                     
             else:
-                print()
-                preco = input ("Digite o valor do produto: ")
-                print()
+                preco = input ("Digite o valor do produto: R$ ")
                 quantidade = input ("Digite a quantidade do produto em estoque: ")
 
                 if len(preco) == 0 or len(quantidade) == 0:
@@ -187,25 +198,32 @@ def executar_opcao(opcao, service):
                     service.cadastrar_produto(nome, preco, quantidade)
                     break
 
+
     elif opcao == 6:
+        limpar_tela()
+        print ("=======LISTA DE PRODUTOS=======")
+        print ()
         service.listar_produtos()
 
+
     elif opcao == 7:
-        print()
+        limpar_tela()
         print("=======BUSCAR PRODUTO=======")
         service.buscar_produto(ler_inteiro("Digite o Id do produto que deseja buscar: "))
 
+
     elif opcao == 8:
-        print()
-        print("=======ATUALIZAR QUANTIDADE EM ESTOQUE=======")
-
-        service.listar_produtos()
-        
-        print()
-
         rodando = True
         while rodando:
-            codigo = int (input ("Digite o código do produto que deseja atualizar ou [0] Para RETORNAR AO MENU: "))
+            limpar_tela()
+            print ("=======ATUALIZAR QUANTIDADE EM ESTOQUE=======")
+            print ()
+    
+            service.listar_produtos()
+            
+            print ()
+            
+            codigo = int (input ("Digite o ID do produto que deseja atualizar ou [0] Para RETORNAR AO MENU: "))
             if codigo == 0:
                 print ()
 
@@ -233,10 +251,15 @@ def executar_opcao(opcao, service):
                                             
             else:
                 codigo = int (codigo)
-                print()
                 NovaQuantidade = ler_inteiro("Digite a nova quantidade do produto: ")
-                
-                retorno = service.atualizar_estoque(codigo, NovaQuantidade)
+                if NovaQuantidade < 0:
+                    print ()
+                    print ("Erro! O produto não deve ter quantidade menor que zero.")
+                    input ("Pressione ENTER para RETORNAR. ")
+                    continue
+
+                else:
+                    retorno = service.atualizar_estoque(codigo, NovaQuantidade)
 
                 if retorno == None:
                     rodando = True
@@ -247,10 +270,19 @@ def executar_opcao(opcao, service):
                     print(f"Produto [{codigo}] Atualizado para {NovaQuantidade} Unidades em estoque")
                     break
 
+
     elif opcao == 9:
         rodando = True
         while rodando:
-            codigo = input("Informe o código do produto a ser removido ou [0] para RETORNAR AO MENU: ")
+            limpar_tela()
+            print ("=======REMOVER PRODUTO=======")
+            print ()
+    
+            service.listar_produtos()
+            
+            print ()
+    
+            codigo = input("Informe o ID do produto a ser removido ou [0] para RETORNAR AO MENU: ")
             if codigo == "0":
                 print ()
 
@@ -289,21 +321,33 @@ def executar_opcao(opcao, service):
                     service.remover_produto(codigo)
                     break
 
+
     elif opcao == 10:
+        limpar_tela()
         service.listar_produtos_inverso()
+
         
     elif opcao == 11:
+        limpar_tela()
         service.listar_produtos_ordenados_por_id()
 
+
     elif opcao == 12:
-        print()
+        limpar_tela()
         print("=======BUSCAR PRODUTO COM BUSCA BINARIA=======")
-        service.buscar_produto_binario(ler_inteiro("Digite o Id do produto que deseja buscar: "))
+        service.buscar_produto_binario(ler_inteiro("Digite o ID do produto que deseja buscar: "))
+
         
     elif opcao == 13:
         rodando = True
         while rodando:
-            codigo_cliente = ler_inteiro("Digite o código do cliente ou [0] para RETORNAR AO MENU: ")
+            limpar_tela()
+            print ("=======LISTA DE CLIENTES=======")
+            service.listar_clientes()
+            print ()
+            print ("=======REALIZAR VENDA=======")
+
+            codigo_cliente = ler_inteiro("Digite o ID do cliente ou [0] para RETORNAR AO MENU: ")
             if codigo_cliente == 0:
                 print ()
                 
@@ -351,36 +395,46 @@ def executar_opcao(opcao, service):
                 else:
                     service.realizar_venda_exemplo(codigo_cliente, itens)
                     break
-                    
-        
 
+                    
     elif opcao == 14:
+        limpar_tela()
         service.listar_vendas()
         
 
     elif opcao == 15:
+        limpar_tela()
         service.primeira_venda()
         
 
     elif opcao == 16:
+        limpar_tela()
         service.valor_total_estoque()
         
 
     elif opcao == 17:
+        limpar_tela()
         service.valor_total_vendas()
         
 
     elif opcao == 18:
+        limpar_tela()
         service.clientes_e_valores_totais_gastos()
 
+
     elif opcao == 19:
+        limpar_tela()
         service.cliente_que_mais_gastou()
         
 
     elif opcao == 20:
+        limpar_tela()
         service.produto_mais_vendido()
 
+
     elif opcao == 21:
+        limpar_tela()
+        print ("=======DESFAZER ULTIMA OPERAÇÃO=======")
         print ()
         certeza = input ('''Você deseja DESFAZER A ULTIMA OPERAÇÃO?: 
 [1] -> SIM
@@ -391,10 +445,13 @@ def executar_opcao(opcao, service):
             service.desfazer_ultima_operacao()
 
         elif certeza == 2:
+            print ()
+            print ("Retornando para o menu principal...")
             return
 
         else:
             print ("Erro! OPÇÃO INVÁLIDA, Processo Cancelado!")
+
 
     else:
         print("Opcao invalida. Tente novamente.")
@@ -417,7 +474,7 @@ def main():
                 certeza = True
                 while certeza:
                     print ()
-                    certeza = int (input ('''Você realmente deseja fechar o programa?
+                    certeza = int (input ('''Você realmente deseja encerrar o programa?
 [1] SIM
 [2] NÃO
 '''))
