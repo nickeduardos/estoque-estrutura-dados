@@ -1,251 +1,157 @@
-# Projeto Exemplo - Sistema de Estoque e Vendas
+# Trabalho Para a disciplina de Organização e Abstração na Programação.
 
-Este projeto e uma base de estudo para o trabalho avaliativo de Estrutura de Dados.
-Ele nao e uma solucao pronta. A ideia e mostrar uma organizacao inicial do codigo,
-deixar alguns arquivos importantes encaminhados e indicar onde os grupos devem completar
-as regras do sistema.
+ALUNOS
 
-O projeto usa Python puro e execucao pelo terminal.
+RA / NOME
 
-## O que este projeto entrega
+1139745 - Nick Eduardo dos Santos
 
-- arvore de pastas organizada;
-- classes principais do dominio: `Cliente`, `Produto` e `Venda`;
-- estruturas de dados separadas em arquivos proprios;
-- persistencia em arquivos CSV;
-- dados iniciais cadastrados em `data/`;
-- contrato dos arquivos de banco;
-- geracao de codigo sequencial;
-- menu numerico com as opcoes esperadas no trabalho;
-- metodos no `EstoqueService` preparados como ponto de partida.
+1139819 - Lucas Gazolla
 
-## O que os alunos devem completar
+1139685 - Endrewell Favaretto
 
-O arquivo `services/estoque_service.py` esta propositalmente incompleto em varias
-funcionalidades. Os metodos com `pass` indicam pontos que os grupos devem implementar.
+1139541 - Gustavo Durante
 
-Devem ser completados, entre outros:
+```markdown
+# Sistema de Controle de Estoque e Vendas (Estruturas de Dados)
 
-- cadastro, listagem, busca, remocao e atualizacao usando as estruturas;
-- regra completa de venda;
-- venda com um ou mais produtos;
-- baixa de estoque;
-- insercao das vendas na Fila;
-- uso da Pilha para desfazer operacoes;
-- relatorios de estoque, vendas, cliente que mais gastou e produto mais vendido;
-- salvamento automatico depois de cada alteracao valida.
+Este projeto é um sistema completo de gerenciamento de estoque, cadastro de clientes e controle de vendas desenvolvido em **Python** como trabalho avaliativo da disciplina de **Estrutura de Dados**. 
 
-## Como executar
+O programa opera via interface de linha de comando (terminal) e aplica **estruturas de dados encadeadas criadas do zero** para gerenciamento de dados em memória, integrando persistência automática em arquivos `.csv`.
 
-Entre na pasta do projeto:
+---
 
-```bash
-cd projeto_exemplo
-```
+## Funcionalidades do Sistema
 
-Execute:
+### Gestão de Clientes
+- **Cadastrar Cliente**: Adiciona novos clientes gerando código sequencial automático (`1, 2, 3...`).
+- **Listar Clientes**: Exibe todos os clientes cadastrados armazenados na **Lista Simplesmente Encadeada (LSE)**.
+- **Buscar Cliente**: Pesquisa cliente por código ou nome.
+- **Remover Cliente**: Exclui o cliente da LSE e atualiza os registros.
 
-```bash
-python3 main.py
-```
+### Gestão de Produtos e Estoque
+- **Cadastrar Produto**: Registra produtos com nome, preço e quantidade com código sequencial automático.
+- **Listar Produtos**: Exibe produtos armazenados na **Lista Duplamente Encadeada (LDE)**.
+- **Listar Produtos em Ordem Inversa**: Percorre a LDE do fim para o início utilizando os ponteiros anteriores (`anterior`).
+- **Buscar Produto**: Consulta produtos por código ou nome.
+- **Atualizar Estoque**: Realiza entradas e saídas de itens no estoque.
+- **Remover Produto**: Exclui produto da LDE.
+- **Listar Produtos Ordenados por ID**: Ordena os produtos utilizando o algoritmo **Insertion Sort** manual.
+- **Busca Binária por ID**: Localiza produtos rapidamente por código após ordenação.
 
-O menu ja possui as opcoes do trabalho. Algumas opcoes podem nao funcionar totalmente
-enquanto o `EstoqueService` nao for completado.
+### Gestão de Vendas
+- **Realizar Venda**: Processa vendas com suporte a múltiplos itens, verificação e baixa automática de estoque, validação de cliente e cálculo do valor total.
+- **Fila de Vendas**: Registra e exibe o histórico de vendas na ordem de realização utilizando uma **Fila (FIFO)**.
+- **Visualizar Primeira Venda**: Consulta o primeiro elemento da fila de vendas (*peek*).
 
-## Organizacao dos arquivos
+### Relatórios e Indicadores
+- **Valor Total do Estoque**: Soma do valor acumulado (`preço × quantidade`) de todos os produtos em estoque.
+- **Valor Total das Vendas**: Faturamento acumulado de todas as vendas processadas.
+- **Gastos por Cliente**: Relatório detalhado dos valores totais consumidos por cada cliente.
+- **Cliente que Mais Gastou**: Identificação do cliente com maior volume financeiro de compras.
+- **Produto Mais Vendido**: Ranking e exibição do item com maior quantidade de unidades vendidas.
+
+### Controle de Operações e Navegação
+- **Desfazer Última Operação (Undo)**: Reverte ações recentes (cadastros, remoções, alterações de estoque ou vendas) utilizando uma **Pilha (LIFO)**.
+- **Retorno ao Menu**: Permite ao usuário cancelar ou voltar ao menu principal a qualquer momento caso selecione uma opção por engano.
+
+---
+
+## Estruturas de Dados Utilizadas
+
+Conforme os requisitos do trabalho, as estruturas de dados nativas do Python (como listas) são restritas a operações auxiliares ou de persistência. Todas as regras principais de armazenamento em memória utilizam estruturas encadeadas próprias:
+
+| Estrutura | Aplicação no Sistema | Arquivo |
+| :--- | :--- | :--- |
+| **LSE (Lista Simplesmente Encadeada)** | Armazenamento e manipulação de **Clientes** | `estruturas/lse.py` |
+| **LDE (Lista Duplamente Encadeada)** | Armazenamento de **Produtos** (permite travessia direta e inversa) | `estruturas/lde.py` |
+| **Fila (FIFO - First In, First Out)** | Registro cronológico do histórico de **Vendas** | `estruturas/fila.py` |
+| **Pilha (LIFO - Last In, First Out)** | Histórico de ações para a funcionalidade **Desfazer** | `estruturas/pilha.py` |
+
+---
+
+## Algoritmos Implementados
+
+- **Insertion Sort (`algoritmos/ordenacao.py`)**: Algoritmo de ordenação por inserção implementado manualmente (sem utilizar funções nativas como `sort()` ou `sorted()`) para ordenar os produtos pelo ID.
+- **Busca Binária (`algoritmos/busca_binaria.py`)**: Algoritmo de busca binária ($O(\log n)$) para localização rápida de produtos na coleção previamente ordenada.
+
+---
+
+## Persistência em Arquivos CSV
+
+O sistema realiza a leitura dos arquivos ao iniciar e salva automaticamente qualquer alteração válida nos arquivos `.csv` localizados na pasta `data/`.
+
+### Formato e Contrato dos Arquivos CSV:
+1. **`data/clientes.csv`**: `codigo,nome`
+2. **`data/produtos.csv`**: `codigo,nome,preco,quantidade`
+3. **`data/vendas.csv`**: `codigo,codigo_cliente,itens,valor_total`
+   - *Estrutura do campo `itens`*: `codigo_produto:quantidade:preco_unitario` (múltiplos itens separados por `|`). Exemplo: `2:1:18.9|4:3:1.2`.
+
+---
+
+## Estrutura do Projeto
 
 ```text
-projeto_exemplo/
-├── main.py
-├── models/
+estoque-estrutura-dados/
+├── main.py                    # Menu principal e fluxo do terminal
+├── models/                    # Classes de domínio (Cliente, Produto, Venda)
 │   ├── cliente.py
 │   ├── produto.py
 │   └── venda.py
-├── estruturas/
-│   ├── nodo.py
-│   ├── dnodo.py
-│   ├── lse.py
-│   ├── lde.py
-│   ├── fila.py
-│   └── pilha.py
-├── algoritmos/
-│   ├── ordenacao.py
-│   └── busca_binaria.py
-├── services/
-│   ├── estoque_service.py
-│   └── persistencia_service.py
-├── data/
-│   ├── clientes.csv
-│   ├── produtos.csv
-│   └── vendas.csv
-└── README.md
+├── estruturas/                # Estruturas de dados próprias
+│   ├── nodo.py                # Nodo simples (LSE, Fila, Pilha)
+│   ├── dnodo.py               # Nodo duplo (LDE)
+│   ├── lse.py                 # Lista Simplesmente Encadeada
+│   ├── lde.py                 # Lista Duplamente Encadeada
+│   ├── fila.py                # Fila (FIFO)
+│   └── pilha.py               # Pilha (LIFO)
+├── algoritmos/                # Algoritmos manuais
+│   ├── ordenacao.py           # Insertion Sort
+│   └── busca_binaria.py       # Busca Binária
+├── services/                  # Regras de negócio e persistência
+│   ├── estoque_service.py     # Lógica central do sistema
+│   └── persistencia_service.py# Leitura e escrita dos CSVs
+└── data/                      # Arquivos de banco de dados
+    ├── clientes.csv
+    ├── produtos.csv
+    └── vendas.csv
+
 ```
 
-- `main.py`: contem o menu de terminal e chama os metodos do service.
-- `models/`: contem as classes que representam os dados principais do sistema.
-- `estruturas/`: contem as implementacoes das estruturas obrigatorias.
-- `algoritmos/`: contem ordenacao manual e busca binaria.
-- `services/`: contem a persistencia pronta e o service principal a completar.
-- `data/`: contem os arquivos CSV que simulam o banco de dados.
+---
 
-## Estruturas de dados
+## Como Executar o Projeto
 
-As estruturas obrigatorias aparecem em `estruturas/`:
+### Pré-requisitos
 
-- `LSE`: deve armazenar os clientes.
-- `LDE`: deve armazenar os produtos.
-- `Fila`: deve armazenar as vendas na ordem em que aconteceram.
-- `Pilha`: deve armazenar o historico usado para desfazer operacoes.
+* Python 3.8 ou superior instalado.
 
-As listas nativas do Python podem aparecer como apoio, por exemplo para converter uma
-estrutura antes de salvar em CSV ou antes de ordenar. Elas nao devem substituir as
-estruturas obrigatorias.
+### Passo a Passo
 
-## Codigos sequenciais
+1. Navegue até a pasta do projeto:
 
-Os codigos de clientes, produtos e vendas devem ser sequenciais, iniciando em `1`.
+```bash
+cd estoque-estrutura-dados
 
-O `EstoqueService` ja possui estes metodos de apoio:
-
-```python
-gerar_proximo_codigo_cliente()
-gerar_proximo_codigo_produto()
-gerar_proximo_codigo_venda()
 ```
 
-Eles usam a mesma ideia: percorrem os registros ja carregados, encontram o maior codigo
-existente e retornam o proximo numero.
+2. Execute o programa:
 
-Exemplo:
+```bash
+python main.py
+# ou
+python3 main.py
+
+```
+
+---
+
+## Opções do Menu Terminal
 
 ```text
-maior codigo atual: 10
-proximo codigo: 11
-```
-
-Assim, o usuario nao precisa digitar ID ao cadastrar um novo cliente, produto ou venda.
-
-## Persistencia em CSV
-
-A persistencia fica em `services/persistencia_service.py`.
-
-Esse arquivo ja esta implementado e faz quatro tarefas principais:
-
-- cria os CSVs se eles nao existirem;
-- carrega clientes, produtos e vendas ao iniciar;
-- transforma linhas do CSV em objetos Python;
-- salva listas de objetos de volta nos arquivos.
-
-Os arquivos ficam na pasta `data/`:
-
-- `clientes.csv`
-- `produtos.csv`
-- `vendas.csv`
-
-Se uma linha invalida for encontrada, o sistema mostra um aviso e continua executando.
-Isso evita que um dado errado derrube todo o programa.
-
-## Contrato dos arquivos CSV
-
-Contrato significa: quais colunas cada arquivo precisa ter, em qual ordem elas aparecem
-e que tipo de dado o sistema espera encontrar em cada coluna.
-
-Todos os arquivos usam:
-
-- primeira linha como cabecalho;
-- virgula `,` como separador de colunas;
-- uma linha para cada registro;
-- numeros decimais com ponto, por exemplo `18.9`, e nao `18,9`.
-
-### `clientes.csv`
-
-Guarda os clientes.
-
-```csv
-codigo,nome
-1,Ana Silva
-```
-
-| Coluna   | Tipo esperado | Regra                             |
-| -------- | ------------- | --------------------------------- |
-| `codigo` | inteiro       | sequencial, maior que zero        |
-| `nome`   | texto         | obrigatorio, nao pode ficar vazio |
-
-Ao carregar esse arquivo, cada linha valida deve virar um objeto `Cliente` e entrar na
-`LSE`.
-
-### `produtos.csv`
-
-Guarda os produtos.
-
-```csv
-codigo,nome,preco,quantidade
-1,Caneta azul,2.5,48
-```
-
-| Coluna       | Tipo esperado | Regra                             |
-| ------------ | ------------- | --------------------------------- |
-| `codigo`     | inteiro       | sequencial, maior que zero        |
-| `nome`       | texto         | obrigatorio, nao pode ficar vazio |
-| `preco`      | decimal       | deve ser maior que zero           |
-| `quantidade` | inteiro       | deve ser zero ou maior            |
-
-Ao carregar esse arquivo, cada linha valida deve virar um objeto `Produto` e entrar na
-`LDE`.
-
-### `vendas.csv`
-
-Guarda as vendas.
-
-```csv
-codigo,codigo_cliente,itens,valor_total
-1,1,1:2:2.5,5.0
-2,2,2:1:18.9|4:3:1.2,22.5
-```
-
-| Coluna           | Tipo esperado     | Regra                                   |
-| ---------------- | ----------------- | --------------------------------------- |
-| `codigo`         | inteiro           | sequencial, maior que zero              |
-| `codigo_cliente` | inteiro           | codigo do cliente da venda              |
-| `itens`          | texto estruturado | produtos, quantidades e precos da venda |
-| `valor_total`    | decimal           | total da venda                          |
-
-O campo `itens` usa este formato:
-
-```text
-codigo_produto:quantidade:preco_unitario
-```
-
-Quando a venda possui mais de um produto, os itens ficam separados por `|`:
-
-```text
-2:1:18.9|4:3:1.2
-```
-
-Esse exemplo significa:
-
-- produto `2`, quantidade `1`, preco unitario `18.9`;
-- produto `4`, quantidade `3`, preco unitario `1.2`.
-
-Ao carregar esse arquivo, cada linha valida deve virar um objeto `Venda` e entrar na
-`Fila`.
-
-## Algoritmos
-
-O arquivo `algoritmos/ordenacao.py` implementa Insertion Sort para ordenar produtos por
-ID, sem usar `sort()` ou `sorted()`.
-
-O arquivo `algoritmos/busca_binaria.py` implementa Busca Binaria para localizar um
-produto por ID depois que a colecao auxiliar estiver ordenada.
-
-A `LDE` continua sendo a estrutura principal dos produtos. A colecao auxiliar serve
-apenas para ordenar e buscar.
-
-## Menu esperado
-
-O menu do `main.py` ja apresenta as opcoes do trabalho:
-
-```text
+==================================================
+           SISTEMA DE CONTROLE DE ESTOQUE
+==================================================
 1  - Cadastrar cliente
 2  - Listar clientes
 3  - Buscar cliente
@@ -258,7 +164,7 @@ O menu do `main.py` ja apresenta as opcoes do trabalho:
 10 - Listar produtos em ordem inversa
 11 - Listar produtos ordenados por ID
 12 - Buscar produto por ID usando Busca Binaria
-13 - Realizar venda simples de exemplo
+13 - Realizar venda
 14 - Visualizar fila de vendas
 15 - Visualizar primeira venda da fila
 16 - Exibir valor total do estoque
@@ -268,25 +174,6 @@ O menu do `main.py` ja apresenta as opcoes do trabalho:
 20 - Exibir produto mais vendido
 21 - Desfazer ultima operacao
 0  - Sair
+==================================================
+
 ```
-
-O menu e apenas a entrada do sistema. A regra de cada opcao deve ficar organizada no
-`EstoqueService`.
-
-## Testes manuais recomendados
-
-- iniciar o programa com os arquivos CSV ja preenchidos;
-- listar clientes, produtos e vendas;
-- cadastrar novo cliente e confirmar codigo sequencial;
-- cadastrar novo produto e confirmar codigo sequencial;
-- buscar cliente existente e inexistente;
-- buscar produto existente e inexistente;
-- tentar preco zero ou negativo;
-- tentar quantidade negativa;
-- ordenar produtos por ID;
-- buscar produto por ID usando Busca Binaria;
-- realizar venda valida;
-- tentar venda com estoque insuficiente;
-- reiniciar o programa e conferir se os dados foram carregados;
-- testar desfazer com Pilha vazia;
-- conferir se os arquivos CSV foram atualizados corretamente.
