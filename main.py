@@ -59,42 +59,47 @@ def executar_opcao(opcao, service):
             limpar_tela()
             print ("=======CADASTRAR CLIENTE=======")
             nome = input ("Informe o nome do cliente ou [0] para RETORNAR AO MENU: ")
+            for letra in nome:
+                if letra not in service.alfabeto():
+                    print ("Erro! Caractere Invalido. ")
+                    return
 
-            if nome == "0":
-                print ()
+                else:
+                    if nome == "0":
+                        print ()
 
-                certeza = True
-                while certeza:
-                    certeza = int (input ('''VOLTAR PARA O MENU?
+                        certeza = True
+                        while certeza:
+                            certeza = int (input ('''VOLTAR PARA O MENU?
 [1] SIM
 [2] NÃO
 '''))
-                    if certeza == 1:
-                        rodando = False
-                        certeza = False
+                            if certeza == 1:
+                                rodando = False
+                                certeza = False
 
-                    elif certeza == 2:
-                        input ("Pressione ENTER para VOLTAR")
-                        certeza = False
-                        rodando = True
+                            elif certeza == 2:
+                                input ("Pressione ENTER para VOLTAR")
+                                certeza = False
+                                rodando = True
+
+                            else:
+                                print ()
+                                input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                                certeza = True
+                                rodando = True
 
                     else:
-                        print ()
-                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
-                        certeza = True
-                        rodando = True
+                        if len(nome) == 0:
+                            print ()
+                            print ("Erro! O nome não pode estar vazio.")
+                            print ()
+                            input ("Pressione ENTER para tentar novamente.")
+                            print ()
 
-            else:
-                if len(nome) == 0:
-                    print ()
-                    print ("Erro! O nome não pode estar vazio.")
-                    print ()
-                    input ("Pressione ENTER para tentar novamente.")
-                    print ()
-
-                else:
-                    service.cadastrar_cliente(nome)
-                    break
+                        else:
+                            service.cadastrar_cliente(nome)
+                            break
 
 
     elif opcao == 2:
@@ -162,15 +167,22 @@ def executar_opcao(opcao, service):
 
             nome = input ("Informe o nome do produto que deseja cadastrar ou [0] para RETORNAR AO MENU: ")
 
-            if nome == "0":
+            for letra in nome:
+                if letra not in service.alfabeto():
+                    print ("Erro! Caractere Invalido. ")
+                    return
 
-                print ()
+                else:
 
-                certeza = True
+                    if nome == "0":
 
-                while certeza:
+                        print ()
 
-                    certeza = int (input ('''VOLTAR PARA O MENU?
+                        certeza = True
+
+                        while certeza:
+
+                            certeza = int (input ('''VOLTAR PARA O MENU?
 
 [1] SIM
 
@@ -178,81 +190,81 @@ def executar_opcao(opcao, service):
 
 '''))
 
-                    if certeza == 1:
+                            if certeza == 1:
 
-                        rodando = False
-                        certeza = False
+                                rodando = False
+                                certeza = False
 
-                    elif certeza == 2:
+                            elif certeza == 2:
 
-                        input ("Pressione ENTER para VOLTAR")
+                                input ("Pressione ENTER para VOLTAR")
 
-                        certeza = False
-                        rodando = True
+                                certeza = False
+                                rodando = True
 
-                    else:
+                            else:
 
-                        print ()
+                                print ()
 
-                        input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
+                                input ("Erro! CARACTERE INVALIDO. Pressione ENTER para retornar.")
 
-                        certeza = True
-                        rodando = True
-
-            else:
-
-                produto_existente = service.buscar_produto_por_nome(nome)
-
-                if produto_existente is not None:
-
-                    quantidade = input(f"Produto [{produto_existente.nome}] disponível em estoque. Informe a quantidade a ser adicionada: ")
-
-                    if len(quantidade) == 0:
-
-                        print()
-
-                        print("Erro! os campos devem ser preenchidos.")
-
-                        input("Pressione ENTER para retornar")
-
-                        rodando = True
+                                certeza = True
+                                rodando = True
 
                     else:
 
-                        quantidade = int(quantidade)
+                        produto_existente = service.buscar_produto_por_nome(nome)
 
-                        service.cadastrar_produto(
-                            nome,
-                            quantidade=quantidade
-                        )
+                        if produto_existente is not None:
 
-                        break
+                            quantidade = input(f"Produto [{produto_existente.nome}] disponível em estoque. Informe a quantidade a ser adicionada: ")
 
-                else:
+                            if len(quantidade) == 0:
 
-                    preco = input("Digite o preço do produto R$: ")
+                                print()
 
-                    quantidade = input("Digite a quantidade do produto: ")
+                                print("Erro! os campos devem ser preenchidos.")
 
-                    if len(preco) == 0 or len(quantidade) == 0:
+                                input("Pressione ENTER para retornar")
 
-                        print ()
+                                rodando = True
 
-                        print ("Erro! os campos devem ser preenchidos.")
+                            else:
 
-                        input ("Pressione ENTER para retornar")
+                                quantidade = int(quantidade)
 
-                        rodando = True
+                                service.cadastrar_produto(
+                                    nome,
+                                    quantidade=quantidade
+                                )
 
-                    else:
+                                break
 
-                        preco = float(preco)
+                        else:
 
-                        quantidade = int(quantidade)
+                            preco = input("Digite o preço do produto R$: ")
 
-                        service.cadastrar_produto(nome, preco, quantidade)
+                            quantidade = input("Digite a quantidade do produto: ")
 
-                        break
+                            if len(preco) == 0 or len(quantidade) == 0:
+
+                                print ()
+
+                                print ("Erro! os campos devem ser preenchidos.")
+
+                                input ("Pressione ENTER para retornar")
+
+                                rodando = True
+
+                            else:
+
+                                preco = float(preco)
+
+                                quantidade = int(quantidade)
+
+                                service.cadastrar_produto(nome, preco, quantidade)
+
+                                break
 
 
     elif opcao == 6:
