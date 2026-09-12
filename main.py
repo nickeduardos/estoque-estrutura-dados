@@ -454,9 +454,16 @@ def executar_opcao(opcao, service):
                 while True:
 
                     if primeiro_produto:
-                        codigo_produto = ler_inteiro("Digite o código do produto a ser adicionado ao carrinho: ")
+                        print ()
+                        print ("=======LISTA DE PRODUTOS=======")
+                        service.listar_produtos()
+                        print ()
+                        codigo_produto = ler_inteiro("Digite o ID do produto a ser adicionado ao carrinho: ")
 
                     else:
+                        service.listar_produtos()
+                        print ()
+                        print ("=======LISTA DE PRODUTOS=======")
                         codigo_produto = ler_inteiro("Infome o ID do próximo produto a ser adicionado "
                                                      "OU DIGITE 0 PARA FINALIZAR A COMPRA: ")
                     if codigo_produto == 0:
@@ -465,7 +472,7 @@ def executar_opcao(opcao, service):
 
                     if produto is None:
                         print()
-                        print(f"Produto com código [{codigo_produto}] não encontrado.")
+                        print(f"Produto com ID [{codigo_produto}] não encontrado.")
                         input("Pressione ENTER para tentar novamente.")
                         continue
 
